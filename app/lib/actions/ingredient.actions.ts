@@ -1,5 +1,5 @@
 "use server";
-import { Ingredient } from '../../../../backend/models/Ingredient';
+import Ingredient from "../database/models/ingredient.model"
 import { connectToDatabase } from "../database/mongoose";
 import mongoose from "mongoose";
 
