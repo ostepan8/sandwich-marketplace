@@ -3,7 +3,7 @@ import { title, subtitle } from "@/components/primitives";
 import { siteConfig } from "@/config/site";
 import { Ingredient } from "@/constants/types";
 import { Switch, Button } from "@nextui-org/react";
-
+import { deleteIngredient } from "@/app/lib/actions/ingredient.actions";
 import { useState } from "react";
 interface Props {
     data: Ingredient
@@ -15,26 +15,7 @@ export default function IngredientTab({ data, removeIngredient }: Props) {
     const bool = data.available ? true : false
     const [available, setAvailable] = useState(bool)
     const deleteIngredientFromDatabase = async () => {
-        try {
-            const response = await fetch(siteConfig.api + "delete-ingredient", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ _id: data._id }),
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                removeIngredient(data._id)
-
-
-            } else {
-                throw new Error()
-            }
-        } catch (error) {
-            alert("error")
-        }
+        deleteIngredient(data._id.valueOf())
     }
 
 

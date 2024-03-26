@@ -108,6 +108,7 @@ export default function IngredientScreen({ data, setIngredientData, }: Props) {
                 <CardFooter className="w-full justify-between flex-col">
                     {data.map((ingredient: Ingredient) =>
                         <IngredientTab
+                            key={ingredient._id.valueOf()}
                             removeIngredient={(_id) => alert(_id)}
                             data={ingredient}
                         />

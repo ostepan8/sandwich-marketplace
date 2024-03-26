@@ -192,7 +192,7 @@ export default function MenuScreen(props: IAppProps) {
                     <div className="flex flex-col md:flex-row md:flex-wrap md:justify-between h-full">
                         {INGREDIENT_TYPES.map((type: String) => (
                             (type === "Bread") ?
-                                <div className="flex-1 min-w-[280px] max-w-xs md:max-w-none py-4 px-2 md:px-4">
+                                <div key={type.valueOf()} className="flex-1 min-w-[280px] max-w-xs md:max-w-none py-4 px-2 md:px-4">
                                     <Select
                                         onChange={(e) => console.log(e.target.value)}
                                         variant="underlined"
@@ -241,7 +241,7 @@ export default function MenuScreen(props: IAppProps) {
             </CardBody>
             <CardFooter className="w-full justify-between flex-col">
                 {data.map((item2: MenuItem) =>
-                    <MenuTab unavailableIngredients={[]} display={false} data={item2} />
+                    <MenuTab key={item2._id.valueOf()} unavailableIngredients={[]} display={false} data={item2} />
                 )}
             </CardFooter>
         </Card>

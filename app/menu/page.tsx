@@ -66,7 +66,7 @@ export default function MenuPage() {
 
             {data.map((item: MenuItem) => {
                 return (
-                    <MenuTab unavailableIngredients={unavailableIngredients} display={true} data={item} />
+                    <MenuTab key={item._id.valueOf()} unavailableIngredients={unavailableIngredients} display={true} data={item} />
                 )
             })}
         </div>

@@ -1,5 +1,5 @@
 "use server";
-import Ingredient from "../../../../backend/models/Ingredient";
+import { Ingredient } from '../../../../backend/models/Ingredient';
 import { connectToDatabase } from "../database/mongoose";
 import mongoose from "mongoose";
 
@@ -61,15 +61,22 @@ export async function changeAvailability(_id: string) {
   export async function deleteIngredient(ingredientId: string) {
     try {
       await connectToDatabase();
+      await Ingredient.find({}).then(ingredients => {
+        console.log(ingredients);
+    }).catch(error => {
+        console.error('Error fetching ingredients:', error);
+    });
+    
   
       // Find the ingredient to delete
-      const ingredientToDelete = await Ingredient.findOne({ _id: new mongoose.Types.ObjectId(ingredientId) });
+      // const ingredientToDelete = await Ingredient.findOne({ _id: new mongoose.Types.ObjectId(ingredientId) });
   
-      if (!ingredientToDelete) {
-        throw new Error("Ingredient not found");
-      }
-      const deletedIngredient = await Ingredient.findByIdAndDelete(ingredientToDelete._id);
-      return deletedIngredient ? JSON.parse(JSON.stringify(deletedIngredient)) : null;
+      // if (!ingredientToDelete) {
+      //   throw new Error("Ingredient not found");
+      // }
+      // const deletedIngredient = await Ingredient.findByIdAndDelete(ingredientToDelete._id);
+      // return deletedIngredient ? JSON.parse(JSON.stringify(deletedIngredient)) : null;
+      return []
     } catch (error) {
       handleError(error);
     }
