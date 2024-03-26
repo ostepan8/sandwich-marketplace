@@ -211,7 +211,7 @@ export default function MenuScreen(props: IAppProps) {
                                     <CheckboxGroup size="lg" label={`Select ${type}(s)`}>
                                         {(type === "Bread" ? breadItems : type === "Cheese" ? cheeseItems : type === "Meat" ? meatItems : type === "Topping" ? toppingItems : sauceItems).map((ingredient) => (
                                             <Checkbox
-
+                                                key={ingredient.name.toString()}
                                                 value={ingredient.name.toString()}
                                                 onChange={() => handleIngredientChange(ingredient)}
                                                 checked={newSandwichIngredients.some(item => item.name === ingredient.name)}
