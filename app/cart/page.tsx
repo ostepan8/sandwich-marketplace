@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useCart } from '../../context/CartContext';
 import { MenuItem, CartContextType } from '@/constants/types';
 import { subtitle, title } from '@/components/primitives';
@@ -18,6 +18,8 @@ const Cart = () => {
     const totalPrice = cartItems.reduce((total, item) => {
         return total + item.menuItem.basePrice.valueOf() * item.quantity.valueOf();
     }, 0);
+
+
 
 
     return (
