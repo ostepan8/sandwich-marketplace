@@ -9,10 +9,11 @@ import { useAuth } from "@/context/AuthContext";
 import { Ingredient, MenuItem } from "@/constants/types";
 import MenuScreen from "@/components/menu-screen";
 import { getMenuAndIngredientData } from "../lib/actions/menu.actions";
+import { adminLogin } from "../lib/actions/admin.actions";
 
 export default function AdminPage() {
 
-    const { signin, authenticated, loading } = useAuth()
+    const { signin, authenticated, loading, signout } = useAuth()
     const [fetchingData, setFetchingData] = useState(true)
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -50,6 +51,8 @@ export default function AdminPage() {
         }
     };
 
+
+
     const handleLogin = async () => {
         if (!username || !password) {
             setErrorMessage("Please enter both username and password.");
@@ -57,25 +60,22 @@ export default function AdminPage() {
         }
 
         try {
-            const response = await fetch(siteConfig.api + "admin-sign-in", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password }),
-            });
+            // Use the adminLogin function directly instead of making an API call
+            const result = await adminLogin({ name: username, password });
 
-            if (response.ok) {
-                const data = await response.json();
-                signin(data.token)
+            if (result && result.status === 'success') {
+                signin(result.token); // Make sure signin is defined and correctly handles the token
                 setErrorMessage("");
             } else {
+                // If adminLogin does not throw but returns falsy or non-success status
                 setErrorMessage('Invalid username or password.');
             }
         } catch (error) {
+            console.error(error); // Always good to log the actual error for debugging
             setErrorMessage("There was an error, please try again");
         }
     };
+
     if (loading) return <div className="h-screen w-full ">
         <h1 className={title()}>Loading...</h1>
         <div className="my-32">
@@ -111,7 +111,7 @@ export default function AdminPage() {
                 <Tab key="photos" title="Orders">
                     <Card>
                         <CardBody>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                            <Button onPress={signout}>Logout</Button>
                         </CardBody>
                     </Card>
                 </Tab>
