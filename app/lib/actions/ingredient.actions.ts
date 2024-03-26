@@ -28,9 +28,9 @@ export async function insertIngredient({name,type}: IngredientProps) {
   try {
     await connectToDatabase();
 
-    const newUser = await Ingredient.create({name,type});
+    const newIngredient = await Ingredient.create({name,type});
 
-    return JSON.parse(JSON.stringify(newUser));
+    return JSON.parse(JSON.stringify(newIngredient));
   } catch (error) {
     handleError(error);
   }
@@ -60,25 +60,14 @@ export async function changeAvailability(_id: string) {
 
   export async function deleteIngredient(ingredientId: string) {
     try {
-      await connectToDatabase();
-      await Ingredient.find({}).then(ingredients => {
-        console.log(ingredients);
-    }).catch(error => {
-        console.error('Error fetching ingredients:', error);
-    });
-    
-  
-      // Find the ingredient to delete
-      // const ingredientToDelete = await Ingredient.findOne({ _id: new mongoose.Types.ObjectId(ingredientId) });
-  
-      // if (!ingredientToDelete) {
-      //   throw new Error("Ingredient not found");
-      // }
-      // const deletedIngredient = await Ingredient.findByIdAndDelete(ingredientToDelete._id);
-      // return deletedIngredient ? JSON.parse(JSON.stringify(deletedIngredient)) : null;
-      return []
+        await connectToDatabase();
+
+        // Actual deletion logic
+        const deletedIngredient = await Ingredient.findByIdAndDelete(ingredientId);
+        return deletedIngredient ? JSON.parse(JSON.stringify(deletedIngredient)) : null;
     } catch (error) {
-      handleError(error);
+      handleError(error)
     }
-  }
+}
+
 

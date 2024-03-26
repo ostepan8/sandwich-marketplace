@@ -16,6 +16,8 @@ import NextLink from "next/link";
 import clsx from "clsx";
 import { Logo } from "@/components/icons";
 import { title } from "./primitives";
+import Photo from "../public/di-pasquale-logo.png"
+import Image from "next/image";
 
 export const Navbar = () => {
 	const [showingNavBar, setShowingNavBar] = React.useState(false)
@@ -25,7 +27,7 @@ export const Navbar = () => {
 			<NavbarContent className="w-full" >
 				<NavbarBrand as="li" className="gap-3 ">
 					<NextLink className="flex justify-start items-center gap-1" href="/">
-						<Logo />
+						<Image alt="logo" src={Photo} width={50} height={50}></Image>
 						<p className="font-bold text-inherit">{siteConfig.name}</p>
 					</NextLink>
 				</NavbarBrand>

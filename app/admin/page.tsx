@@ -8,6 +8,7 @@ import IngredientScreen from "@/components/ingredient-screen";
 import { useAuth } from "@/context/AuthContext";
 import { Ingredient, MenuItem } from "@/constants/types";
 import MenuScreen from "@/components/menu-screen";
+import { getMenuAndIngredientData } from "../lib/actions/menu.actions";
 
 export default function AdminPage() {
 
@@ -30,35 +31,25 @@ export default function AdminPage() {
     }, [])
 
     const fetchMenuDataAndMenuData = async () => {
-        setFetchingData(false)
-
+        setFetchingData(true); // Assuming you want to indicate data is being fetched
 
         try {
-            const response = await fetch(siteConfig.api + "get-menu-and-ingredient-data", {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            // Await the async function to get menu and ingredient data
+            const { menuData, ingredientData } = await getMenuAndIngredientData();
 
-            if (response.ok) {
-                const data = await response.json();
-                setMenuData(data.menuData)
-                setIngredientData(data.ingredientData)
-
-            } else {
-                throw new Error()
-            }
+            // Set the data received to your state
+            setMenuData(menuData);
+            setIngredientData(ingredientData);
         } catch (error) {
-            console.log(error)
+            // Log and set error message if there is an issue in fetching
+            console.error(error); // More informative for debugging
             setErrorMessage("There was an error, please try again");
         } finally {
-            setFetchingData(true)
-
+            // Indicate that data fetching has completed
+            setFetchingData(false);
         }
+    };
 
-
-    }
     const handleLogin = async () => {
         if (!username || !password) {
             setErrorMessage("Please enter both username and password.");

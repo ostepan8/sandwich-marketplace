@@ -6,6 +6,7 @@ import { CircularProgress } from "@nextui-org/react";
 import { Ingredient, MenuItem } from '@/constants/types';
 import CustomOrderCard from '@/components/customOrderCard';
 import MenuTab from '@/components/menu-tab';
+import { getMenuAndIngredientData } from '../lib/actions/menu.actions';
 interface ApiResponse {
     menuData: MenuItem[];
     ingredientData: Ingredient[];
@@ -19,31 +20,26 @@ export default function MenuPage() {
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true); // Start loading before the data fetching
             try {
-                const response = await fetch(siteConfig.api + "get-menu-and-ingredient-data", {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
+                // Use your function to get the data
+                const { menuData, ingredientData }: ApiResponse = await getMenuAndIngredientData();
 
-                if (!response.ok) { // Check if the response was ok (status in the range 200-299)
-                    throw new Error('Network response was not ok');
-                }
-                const data: ApiResponse = await response.json();
-                const { ingredientData } = data
-                setData(data.menuData);
+                // Set the fetched data to your state
+                setData(menuData);
                 const filteredIngredients = ingredientData.filter(ingredient => !ingredient.available);
-                setUnavailableIngredients(filteredIngredients)
-                setLoading(false);
+                setUnavailableIngredients(filteredIngredients);
             } catch (error) {
-                setError("There was an error"); // Set error message
-                setLoading(false);
+                console.error(error); // It's good practice to log the actual error
+                setError("There was an error loading the data."); // Set the error message
+            } finally {
+                setLoading(false); // Stop loading irrespective of the result
             }
         };
 
-        fetchData();
-    }, []);
+        fetchData(); // Execute the function to fetch data
+    }, []); // The empty dependency array ensures this effect runs once after the initial render
+
 
     if (isLoading) return (
         <div className='w-screen h-[75vh] flex justify-center items-center'>

@@ -3,27 +3,36 @@ import { useState } from "react";
 import { CartContextType, Ingredient, MenuItem } from "@/constants/types"; // Correct import paths as necessary
 import { subtitle, title } from "@/components/primitives";
 import { useCart } from "@/context/CartContext";
+import { changeMenuItemAvailability, deleteMenuItem } from "@/app/lib/actions/menu.actions";
 
 type Props = {
     data: MenuItem,
     display: Boolean,
     unavailableIngredients: Ingredient[]
+    removeMenuItemById?: (s: string) => void
 }
 
-export default function MenuTab({ data, display = true, unavailableIngredients }: Props) {
+export default function MenuTab({ data, display = true, unavailableIngredients, removeMenuItemById }: Props) {
     const { addToCart }: CartContextType = useCart();
     const [isLoading, setIsLoading] = useState(false)
     const [added, setAdded] = useState(false)
     const [available, setAvailable] = useState<boolean>(data.available.valueOf());
 
-    // Function to handle availability change
-    const handleAvailabilityChange = (newAvailability: boolean) => {
+    const handleAvailabilityChange = async (newAvailability: boolean) => {
         // Update availability state
         setAvailable(newAvailability);
-        // Placeholder for API call to update the database
+        // Call API to update the database
+        await changeMenuItemAvailability(data._id.valueOf());
         console.log(`Updating availability to ${newAvailability} for ${data.name}`);
     };
 
+    const handleDeleteMenuItem = async () => {
+        setIsLoading(true); // Start loading
+        await deleteMenuItem(data._id.valueOf()); // Call the delete function
+        removeMenuItemById && removeMenuItemById(data._id.valueOf())
+        setIsLoading(false); // Stop loading
+        // Optionally, trigger re-fetching of menu items or update local state to reflect the change
+    };
     // Combine all ingredient names for display
     const ingredientsList = data.ingredients.map(ingredient => ingredient.name).join(', ');
 
@@ -55,10 +64,15 @@ export default function MenuTab({ data, display = true, unavailableIngredients }
                             className="mr-2" // Add some space between the Switch and the Button
                         />
                     </div>
-                    {!display ? <Button>Delete</Button> :
+                    {!display ? <Button onPress={handleDeleteMenuItem}>Delete</Button> :
                         <Button isLoading={isLoading} onPress={async () => {
                             setIsLoading(true); // Turn on loading
                             setTimeout(() => {
+                                if (!data.available) {
+                                    alert("Item is unavailable")
+                                    setIsLoading(false)
+                                    return
+                                }
                                 addToCart(data);
                                 setIsLoading(false);
                                 setAdded(true)

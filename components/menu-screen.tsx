@@ -5,6 +5,7 @@ import MenuTab from "@/components/menu-tab";
 import { INGREDIENT_TYPES, MENU_DATA } from "@/constants";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { siteConfig } from "@/config/site";
+import { insertMenuItem } from "@/app/lib/actions/menu.actions";
 
 export interface IAppProps {
     data: MenuItem[]
@@ -27,8 +28,17 @@ export default function MenuScreen(props: IAppProps) {
         name: '',
         description: '',
         basePrice: 0,
-        available: true
+        available: true,
+        _id: '',
+        ingredients: []
     })
+
+    const removeMenuItemById = (_id: string) => {
+        setMenuData(currentMenuData =>
+            currentMenuData.filter(item => item._id !== _id)
+        );
+    };
+
     const handleIngredientChange = (selectedIngredient: Ingredient) => {
         setNewSandwichIngredients((currentIngredients) => {
             // Check if the ingredient is already selected
@@ -58,9 +68,10 @@ export default function MenuScreen(props: IAppProps) {
         // Add any other necessary validations here
         return ""; // Return an empty string if all validations pass
     };
+
     const addMenuItemToDatabase = async () => {
-        setErrorMessage(""); // Reset the error message
-        setInserting(true);
+        setErrorMessage(""); // Clear any previous errors
+        setInserting(true); // Indicate that the insert operation is starting
 
         // Validate form data
         const validationError = validateFormData();
@@ -70,29 +81,34 @@ export default function MenuScreen(props: IAppProps) {
             return;
         }
 
+        // Prepare the data for the new menu item
+        const ingredientIds = newSandwichIngredients.map(obj => obj._id);
+        const newMenuItemData = {
+            ...newSandwichData,
+            ingredients: ingredientIds,
+        };
+
         // Proceed if validation passes
         try {
-            const ingredientIds = newSandwichIngredients.map(obj => obj._id);
-            const response = await fetch(siteConfig.api + "insert-menu-item", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ ...newSandwichData, ingredients: ingredientIds }),
+            // Directly call the server-side function to insert the new menu item
+            const populatedItem = await insertMenuItem({
+                name: newMenuItemData.name,
+                description: newMenuItemData.description,
+                basePrice: newMenuItemData.basePrice,
+                ingredientIds: newMenuItemData.ingredients,
+                available: newMenuItemData.available
             });
-            if (!response.ok) {
-                throw new Error(`Server responded with status: ${response.status}`);
-            }
 
-            const data = await response.json();
-            setMenuData(previousIngredientData => [data, ...previousIngredientData]);
+            // Update state with the new menu item data
+            setMenuData(previousMenuData => [populatedItem, ...previousMenuData]);
         } catch (error) {
-            console.error(error); // Log the error for debugging purposes
+            console.error(error); // Log the error for debugging
             setErrorMessage("An error occurred while adding the menu item. Please try again.");
         } finally {
-            setInserting(false);
+            setInserting(false); // Reset the inserting indicator
         }
     };
+
 
     useEffect(() => {
         if (ingredientData == undefined || ingredientData == null) {
@@ -241,7 +257,7 @@ export default function MenuScreen(props: IAppProps) {
             </CardBody>
             <CardFooter className="w-full justify-between flex-col">
                 {data.map((item2: MenuItem) =>
-                    <MenuTab key={item2._id.valueOf()} unavailableIngredients={[]} display={false} data={item2} />
+                    <MenuTab removeMenuItemById={removeMenuItemById} key={item2._id.valueOf()} unavailableIngredients={[]} display={false} data={item2} />
                 )}
             </CardFooter>
         </Card>

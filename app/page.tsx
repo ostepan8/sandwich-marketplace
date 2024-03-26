@@ -3,37 +3,25 @@ import { button as buttonStyles } from "@nextui-org/theme";
 import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
 
+import Photo from "../public/di-pasquale-img.png"
+import Image from "next/image";
+import { Button } from "@nextui-org/react";
 export default function Home() {
 	return (
-		<section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-			<div className="inline-block max-w-lg text-center justify-center">
-				<h1 className={title()}>Make&nbsp;</h1>
-				<h1 className={title({ color: "violet" })}>beautiful&nbsp;</h1>
-				<br />
-				<h1 className={title()}>
-					websites regardless of your design experience.
-				</h1>
-				<h2 className={subtitle({ class: "mt-4" })}>
-					Beautiful, fast and modern React UI library.
-				</h2>
+		<section className="flex flex-col items-center  gap-4 py-8 md:py-10 h-[100vh]">
+			<div className="inline-block max-w-lg text-center">
+				<Image alt="Logo" src={Photo}></Image>
 			</div>
 
 			<div className="flex gap-3">
 				<Link
 					isExternal
-					className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}
 				>
-					Order Now
-				</Link>
-				<Link
-					isExternal
-					className={buttonStyles({ variant: "bordered", radius: "full" })}
-				>
-					Check Cart
+					<Button radius="md" size='lg' className="bg-gradient-to-tr from-[#9d1f2b] to-[#9d1f2b] text-white shadow-lg px-20">
+						See Menu
+					</Button>
 				</Link>
 			</div>
-
-
 		</section>
 	);
 }

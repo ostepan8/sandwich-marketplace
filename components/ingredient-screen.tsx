@@ -7,6 +7,7 @@ import { INGREDIENT_DATA, INGREDIENT_TYPES } from "@/constants";
 import { MenuAndIngredientProps, Ingredient, MenuItem } from "@/constants/types";
 import IngredientTab from "@/components/ingredient-tab";
 import { siteConfig } from "@/config/site";
+import { insertIngredient } from "@/app/lib/actions/ingredient.actions";
 
 type Props = {
     data: Ingredient[];
@@ -18,36 +19,24 @@ export default function IngredientScreen({ data, setIngredientData, }: Props) {
     const [type, setType] = useState<String | null>(null);
     const [inserting, setInserting] = useState(false)
     const addIngredientToDatabase = async () => {
-        try {
-            setInserting(true)
-            const response = await fetch(siteConfig.api + "insert-ingredient", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name: ingredient, type }),
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                setIngredientData(previousIngredientData => {
-                    if (data && Array.isArray(previousIngredientData)) {
-                        return [data, ...previousIngredientData];
-                    }
-                    return previousIngredientData; // If conditions are not met, return the previous state.
-                });
-
-
-            } else {
-                throw new Error()
-            }
-        } catch (error) {
-            alert(ingredient)
-        } finally {
-            setInserting(false)
+        if (type == null || ingredient == null) {
+            return;
         }
+        setInserting(true); // Start the inserting process
+        try {
+            const newIngredient = await insertIngredient({ name: ingredient, type });
 
-    }
+            setIngredientData(previousIngredientData => {
+                // Assuming newIngredient is the newly added ingredient returned from the API
+                // And that previousIngredientData is an array of existing ingredients
+                return [newIngredient, ...previousIngredientData];
+            });
+        } catch (error) {
+            alert(`Failed to add ingredient: ${ingredient}`); // Or handle the error in a more user-friendly way
+        } finally {
+            setInserting(false); // Finish the inserting process
+        }
+    };
     return (
         <div >
             < Card className=" w-[100%] border-spacing-3  p-6" >
@@ -100,16 +89,15 @@ export default function IngredientScreen({ data, setIngredientData, }: Props) {
                                 </Button>
                             </div>
                         </div>
-
-
-
                     </div>
                 </CardBody>
                 <CardFooter className="w-full justify-between flex-col">
                     {data.map((ingredient: Ingredient) =>
                         <IngredientTab
                             key={ingredient._id.valueOf()}
-                            removeIngredient={(_id) => alert(_id)}
+                            removeIngredient={(id) => setIngredientData(currentIngredients =>
+                                currentIngredients.filter(ingredient => ingredient._id !== id)
+                            )}
                             data={ingredient}
                         />
                     )}
