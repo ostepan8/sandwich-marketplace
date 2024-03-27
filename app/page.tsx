@@ -8,7 +8,7 @@ import Image from "next/image";
 import { Button } from "@nextui-org/react";
 export default function Home() {
 	return (
-		<section className="flex flex-col items-center  gap-4 py-8 md:py-10 h-[100vh]">
+		<section className="flex flex-col items-center ">
 			<div className="inline-block max-w-lg text-center">
 				<Image alt="Logo" src={Photo}></Image>
 			</div>

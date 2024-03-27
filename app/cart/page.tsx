@@ -80,7 +80,7 @@ const Cart = () => {
                 </>
             )}
             <div className='my-8 w-full flex justify-center items-center flex-col'>
-                <div className="w-full">
+                {cartItems.length > 0 && <div className="w-full">
 
 
                     <div className="flex justify-center items-center space-x-4 w-1/2 ml-auto mr-auto"> {/* This line ensures horizontal layout and spacing */}
@@ -96,13 +96,13 @@ const Cart = () => {
                             ))}
                         </Select>
                     </div>
-                </div>
-                <Button onClick={() => handleCheckout({ pickUpTime })} className='mt-4 p-16 rounded-3xl w-1/2'> {/* Adjusted margins and paddings as needed */}
+                </div>}
+                {cartItems.length > 0 && <Button onClick={() => handleCheckout({ pickUpTime })} className='mt-4 p-16 rounded-3xl w-1/2'> {/* Adjusted margins and paddings as needed */}
                     <div>
                         <div><h1 className={title({ size: "sm" })}>Proceed to Checkout</h1></div>
                         <div><h1 className={title({ size: "sm" })}>{totalPrice}$</h1></div>
                     </div>
-                </Button>
+                </Button>}
             </div>
 
         </div>

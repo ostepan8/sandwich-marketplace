@@ -6,48 +6,48 @@ import { title as CustomTitle, subtitle as subtitle } from "@/components/primiti
 
 const Footer = () => {
     return (
-        <footer className="flexCenter mt-24 px-10  w-full">
-            <div className="flex flex-1 justify-center">
-                <div className="flex flex-col  mr-16">
-                    <FooterColumn title={FOOTER_CONTACT_INFO.title}>
-                        {FOOTER_CONTACT_INFO.links.map((link) => (
-                            <Link
-                                href={link.label === 'Email' ? `mailto:${link.value}` : link.label === 'Phone' ? `tel:${link.value}` : '/'}
-                                key={link.label}
-                                className="flex flex-col"
-                            >
-                                <p className={"text-lg"}>
-                                    {link.label}
-                                </p>
-                                <p className={"text-sm"}>
-                                    {link.value}
-                                </p>
+        <footer className="flex flex-1  justify-center p-10">
+            <div>
+                <FooterColumn title={FOOTER_CONTACT_INFO.title}>
+                    {FOOTER_CONTACT_INFO.links.map((link) => (
+                        <Link
+                            href={link.label === 'Email' ? `mailto:${link.value}` : link.label === 'Phone' ? `tel:${link.value}` : '/'}
+                            key={link.label}
+                            className="flex flex-col"
+                        >
+                            <p className={"text-lg"}>
+                                {link.label}
+                            </p>
+                            <p className={"text-sm"}>
+                                {link.value}
+                            </p>
+
+                        </Link>
+                    ))}
+                </FooterColumn>
+            </div>
+
+            <div className="flex flex-col ml-16">
+                <FooterColumn title={SOCIALS.title}>
+                    <ul className="regular-14 flex gap-4 text-gray-30">
+                        {SOCIALS.links.map((item) => (
+                            <Link href={item.link} key={item.link} target="_blank" rel="noopener noreferrer">
+                                <div className="flex-row flex">
+                                    <Image
+                                        color="white"
+                                        src={item.icon}
+                                        alt="logo"
+                                        width={24}
+                                        height={24}
+                                    ></Image>
+                                    <p className="text-sm">@{item.link}</p> </div>
 
                             </Link>
                         ))}
-                    </FooterColumn>
-                </div>
-                <div className="flex flex-col ml-16">
-                    <FooterColumn title={SOCIALS.title}>
-                        <ul className="regular-14 flex gap-4 text-gray-30">
-                            {SOCIALS.links.map((item) => (
-                                <Link href={item.link} key={item.link} target="_blank" rel="noopener noreferrer">
-                                    <div className="flex-row flex">
-                                        <Image
-                                            color="white"
-                                            src={item.icon}
-                                            alt="logo"
-                                            width={24}
-                                            height={24}
-                                        ></Image>
-                                        <p className="text-lg">@{item.link}</p> </div>
-
-                                </Link>
-                            ))}
-                        </ul>
-                    </FooterColumn>
-                </div>
+                    </ul>
+                </FooterColumn>
             </div>
+
         </footer>
     );
 };
