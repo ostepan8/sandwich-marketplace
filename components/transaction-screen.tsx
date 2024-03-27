@@ -38,7 +38,7 @@ const TransactionScreen = ({ data }: TransactionProps) => {
                             <h1>Order</h1>
                             {item.cartItems.map((item, index) => {
                                 return (
-                                    <div>
+                                    <div key={index}>
                                         <h1>
                                             {index + 1}. {item.menuItem?.name}
                                         </h1>
