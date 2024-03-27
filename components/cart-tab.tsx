@@ -32,12 +32,12 @@ export const CartTab = ({ item }: Props) => {
     }
     const ingredientsList = item.menuItem?.ingredients.map(ingredient => ingredient.name).join(', ');
 
-    return <div className="w-full border-b py-4 flex flex-col items-center">
-        <div className="flex items-center justify-between w-full">
-            <div className="flex flex-row items-center">
-                <h1 className={`${title()} mr-2`}>{item.menuItem?.name || ""}</h1>
+    return <div className="w-full border-b py-4 flex flex-col items-center overflow-hidden p-8">
+        <div className="flex flex-col sm:flex-row items-center justify-between w-full">
+            <div className="flex flex-row items-start">
+                <h1 className={`${title()}`}>{item.menuItem?.name || ""}</h1>
             </div>
-            <div className="flex items-center ml-6 w-full ">
+            <div className="flex items-center flex-col sm:flex-row ml-4 w-full ">
                 <div className='mx-4 flex-1 flex'>
                     <h1 className={subtitle()}>{ingredientsList?.split("")}</h1>
                 </div>
@@ -53,7 +53,7 @@ export const CartTab = ({ item }: Props) => {
                         </SelectItem>
                     ))}
                 </Select>
-                <div className="mr-6">
+                <div className="mr-0 sm:mr-6">
                     <h1 className={subtitle()}>{(item.menuItem?.basePrice.valueOf() || 0 * item.quantity.valueOf()).toString()}$</h1>
                 </div>
                 <div>

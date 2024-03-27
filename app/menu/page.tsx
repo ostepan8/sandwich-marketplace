@@ -63,7 +63,7 @@ export default function MenuPage() {
                     <MenuTab key={item._id.valueOf()} unavailableIngredients={unavailableIngredients} display={true} data={item} />
                 )
             })}
-            <div className=''>
+            <div className='mb-32'>
                 <CustomOrderCard />
             </div>
         </div>

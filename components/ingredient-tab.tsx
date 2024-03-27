@@ -38,17 +38,17 @@ export default function IngredientTab({ data, removeIngredient }: Props) {
     };
 
     return (
-        <div className="w-full flex flex-row py-4">
-            <div className="flex-1 flex justify-center items-center">
-                <h1 className={`${title()} text-left mr-6`}>{data.name}</h1>
-                <h1 className={`${subtitle()} text-left mt-4`}>-{data.type}</h1>
+        <div className="w-full flex flex-col sm:flex-row py-4">
+            <div className="flex-1 flex justify-center items-center ml-auto mr-auto sm:ml-0 sm:mr-0">
+                <h1 className={`${title()} text-left`}>{data.name}</h1>
+                <h1 className={`${subtitle()} text-left mt-4`}> - {data.type}</h1>
             </div>
-            <div className="ml-auto flex justify-center items-center">
+            <div className=" flex justify-start sm:justify-center items-center ml-auto mr-auto sm:ml-0 sm:mr-0">
                 <div className="pr-6">
                     <h1 className={`${subtitle()} text-left`}>Available</h1>
                     <Switch size={'lg'} isSelected={available.valueOf()} onValueChange={handleAvailabilityChange} />
                 </div>
-                <Button onPress={deleteIngredientFromDatabase} color={'primary'} className="h-full">Delete</Button>
+                <Button onPress={deleteIngredientFromDatabase} color={'primary'} className="h-full p-4">Delete</Button>
             </div>
         </div>
     );

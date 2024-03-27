@@ -38,8 +38,8 @@ export default function IngredientScreen({ data, setIngredientData, }: Props) {
         }
     };
     return (
-        <div >
-            < Card className=" w-[100%] border-spacing-3  p-6" >
+        <div className="w-full h-full" >
+            < Card fullWidth className="border-spacing-3  p-6" >
                 <CardHeader className="justify-between">
                     <div className="flex">
                         <div className="flex flex-col  items-start justify-center">
@@ -53,42 +53,41 @@ export default function IngredientScreen({ data, setIngredientData, }: Props) {
                         <h1 className={subtitle()}>{INGREDIENT_DATA.description}</h1>
                     </div>
                     )}
-                    <div className="flex flex-1 flex-row h-1/6">
-                        <div className="flex flex-1 flex-row h-1/6">
-                            <Input
-                                onChange={(e) => setIngredient(e.target.value)}
-                                variant="underlined"
-                                className="h-full flex-grow" // Make the input field flexible to take up available space
-                                size="lg"
-                                placeholder="turkey, lettuce, tomato, etc"
-                                type="form"
-                                label="Add more ingredients!"
+                    <div className="flex flex-1 flex-col h-1/6 sm:flex-row">
+                        <Input
+                            onChange={(e) => setIngredient(e.target.value)}
+                            variant="underlined"
+                            className="h-full flex-grow" // Make the input field flexible to take up available space
+                            size="lg"
+                            placeholder="turkey, lettuce, tomato, etc"
+                            type="form"
+                            label="Add more ingredients!"
 
-                            />
-                            <div className="flex flex-row h-full items-center ml-4">
-                                <div className="flex w-72">
-                                    <Select
-                                        onChange={(e) => setType(e.target.value)}
-                                        variant="underlined"
-                                        size="lg"
-                                        label="Select a type"
-                                        className="max-w-xs"
-                                    >
-                                        {INGREDIENT_TYPES.map((type: String) => (
-                                            <SelectItem key={type.toString()} value={type.toString()}>
-                                                {type}
-                                            </SelectItem>
-                                        ))}
-                                    </Select>
-                                </div>
-                                <Button onPress={addIngredientToDatabase} color={'primary'} className="ml-4">
-                                    <div className="p-4">
-                                        {!inserting ? "Add" : <CircularProgress size="sm" />}
-                                    </div>
-
-                                </Button>
+                        />
+                        <div className="flex flex-col sm:flex-row h-full items-center ml-0 sm:ml-4">
+                            <div className="flex w-full sm:w-72 mb-8 sm:mb-0">
+                                <Select
+                                    fullWidth={true}
+                                    onChange={(e) => setType(e.target.value)}
+                                    variant="underlined"
+                                    size="lg"
+                                    label="Select a type"
+                                >
+                                    {INGREDIENT_TYPES.map((type: String) => (
+                                        <SelectItem key={type.toString()} value={type.toString()}>
+                                            {type}
+                                        </SelectItem>
+                                    ))}
+                                </Select>
                             </div>
+                            <Button onPress={addIngredientToDatabase} color={'primary'} className="ml-4">
+                                <div className="p-4">
+                                    {!inserting ? "Add" : <CircularProgress size="sm" />}
+                                </div>
+
+                            </Button>
                         </div>
+
                     </div>
                 </CardBody>
                 <CardFooter className="w-full justify-between flex-col">

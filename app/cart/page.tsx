@@ -62,7 +62,7 @@ const Cart = () => {
     const isBetween5and7 = hours >= 17 && hours < 19;
 
     return (
-        <div>
+        <div className='flex flex-1 flex-col'>
             {cartItems.length === 0 ? (
                 <h1 className={title()}>Your cart is empty.</h1>
             ) : (
@@ -81,10 +81,7 @@ const Cart = () => {
             )}
             <div className='my-8 w-full flex justify-center items-center flex-col'>
                 {cartItems.length > 0 && <div className="w-full">
-
-
                     <div className="flex justify-center items-center space-x-4 w-1/2 ml-auto mr-auto"> {/* This line ensures horizontal layout and spacing */}
-
                         <CheckboxGroup onChange={() => setPickUpTime("Now")} isDisabled={!isBetween5and7} label="Choose Pick Up Time" orientation="horizontal" color="secondary"
                             defaultValue={[isBetween5and7 ? "now" : "input"]}>
                             <Checkbox value="now">Now</Checkbox>
@@ -99,8 +96,8 @@ const Cart = () => {
                 </div>}
                 {cartItems.length > 0 && <Button onClick={() => handleCheckout({ pickUpTime })} className='mt-4 p-16 rounded-3xl w-1/2'> {/* Adjusted margins and paddings as needed */}
                     <div>
-                        <div><h1 className={title({ size: "sm" })}>Proceed to Checkout</h1></div>
-                        <div><h1 className={title({ size: "sm" })}>{totalPrice}$</h1></div>
+                        <div><h1 className={subtitle()}>Proceed to Checkout</h1></div>
+                        <div><h1 className={subtitle()}>{totalPrice}$</h1></div>
                     </div>
                 </Button>}
             </div>

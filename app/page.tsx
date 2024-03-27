@@ -1,14 +1,10 @@
-import { Link } from "@nextui-org/link";
-import { button as buttonStyles } from "@nextui-org/theme";
-import { siteConfig } from "@/config/site";
-import { title, subtitle } from "@/components/primitives";
-
+import { Link } from "@nextui-org/link"
 import Photo from "../public/di-pasquale-img.png"
 import Image from "next/image";
 import { Button } from "@nextui-org/react";
 export default function Home() {
 	return (
-		<section className="flex flex-col items-center ">
+		<section className="flex flex-col items-center flex-1 h-[80vh]">
 			<div className="inline-block max-w-lg text-center">
 				<Image alt="Logo" src={Photo}></Image>
 			</div>

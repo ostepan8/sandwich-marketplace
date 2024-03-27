@@ -106,7 +106,7 @@ export default function AdminPage() {
         </div>
     );
     if (authenticated) return (
-        <div className="flex w-full flex-col">
+        <div className="w-full flex flex-col">
             <div className="mb-10">
                 <h1 className={title()}>Hey there!</h1>
             </div>
