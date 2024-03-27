@@ -34,7 +34,8 @@ const Cart = () => {
             stripeId: '',
             amount: totalPrice,
             cartItems: cartItems,
-            pickUpTime: pickUpTime
+            pickUpTime: pickUpTime,
+            completed: false
         }
         checkoutTransaction(transcation)
     };
