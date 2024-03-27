@@ -35,6 +35,19 @@ const TransactionScreen = ({ data }: TransactionProps) => {
                             <h1 className={title()}>{item.pickUpTime}</h1>
                         </div>
                         <CardBody>
+                            <h1>Order</h1>
+                            {item.cartItems.map((item, index) => {
+                                return (
+                                    <div>
+                                        <h1>
+                                            {index + 1}. {item.menuItem?.name}
+                                        </h1>
+                                        <h2>
+                                            {item.menuItem?.ingredients.join()}
+                                        </h2>
+                                    </div>
+                                )
+                            })}
 
 
                         </CardBody>
