@@ -39,6 +39,10 @@ const TransactionSchema = new Schema({
       ref: "MenuItem",
     },
   ],
+  completed: {
+    default: false,
+    type: Boolean,
+  },
 });
 
 const Transaction =

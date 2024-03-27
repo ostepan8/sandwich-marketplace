@@ -33,8 +33,6 @@ const Cart = () => {
             createdAt: new Date(),
             stripeId: '',
             amount: totalPrice,
-            buyerId: '',
-            buyerPhoneNumber: '',
             cartItems: cartItems,
             pickUpTime: pickUpTime
         }

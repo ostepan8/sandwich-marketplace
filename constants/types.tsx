@@ -61,4 +61,5 @@ export interface ITransaction {
     amount: number;
     cartItems: CartItem[];
     pickUpTime: string
+    completed: boolean
 }

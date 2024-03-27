@@ -29,7 +29,7 @@ export async function POST(request: Request) {
       createdAt: new Date(),
       stripeId: id,
       amount: amount_total ? amount_total : 0,
-      cartItems: [],
+      cartItems: line_items,
       pickUpTime: metadata?.pickUpTime || "",
     };
 

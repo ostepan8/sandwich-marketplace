@@ -6,10 +6,12 @@ import { Card, CardBody, Input, Button, Tab, Tabs, Progress } from "@nextui-org/
 import { siteConfig } from "@/config/site";
 import IngredientScreen from "@/components/ingredient-screen";
 import { useAuth } from "@/context/AuthContext";
-import { Ingredient, MenuItem } from "@/constants/types";
+import { Ingredient, ITransaction, MenuItem } from "@/constants/types";
 import MenuScreen from "@/components/menu-screen";
 import { getMenuAndIngredientData } from "../lib/actions/menu.actions";
 import { adminLogin } from "../lib/actions/admin.actions";
+import { getAllData } from "../lib/actions/transaction.action";
+import TransactionScreen from "@/components/transaction-screen";
 
 export default function AdminPage() {
 
@@ -19,6 +21,7 @@ export default function AdminPage() {
     const [password, setPassword] = useState("");
     const [ingredientData, setIngredientData] = useState<Ingredient[]>([])
     const [menuData, setMenuData] = useState<MenuItem[]>([])
+    const [transactionData, setTransactionData] = useState<ITransaction[]>([])
     const [errorMessage, setErrorMessage] = useState("");
     useEffect(() => {
         fetchMenuDataAndMenuData()
@@ -36,8 +39,8 @@ export default function AdminPage() {
 
         try {
             // Await the async function to get menu and ingredient data
-            const { menuData, ingredientData } = await getMenuAndIngredientData();
-
+            const { menuData, ingredientData, transactions } = await getAllData();
+            setTransactionData(transactions)
             // Set the data received to your state
             setMenuData(menuData);
             setIngredientData(ingredientData);
@@ -109,11 +112,7 @@ export default function AdminPage() {
             </div>
             <Tabs size="lg" aria-label="Options">
                 <Tab key="photos" title="Orders">
-                    <Card>
-                        <CardBody>
-                            <Button onPress={signout}>Logout</Button>
-                        </CardBody>
-                    </Card>
+                    <TransactionScreen data={transactionData}></TransactionScreen>
                 </Tab>
                 <Tab key="menu" title="Menu Customizer" className="py-6" >
                     <MenuScreen data={menuData} setMenuData={setMenuData} ingredientData={ingredientData} />
