@@ -32,12 +32,12 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   }, []);
   const addToCart = (item: MenuItem) => {
     setCartItems((prevItems) => {
-      const itemInCart = prevItems.find((cartItem) => cartItem.menuItem._id === item._id);
+      const itemInCart = prevItems.find((cartItem) => cartItem.menuItem?._id === item._id);
       let updatedCartItems;
 
       if (itemInCart) {
         updatedCartItems = prevItems.map((cartItem) => {
-          if (cartItem.menuItem._id === item._id) {
+          if (cartItem.menuItem?._id === item._id) {
             const newQuantity = Math.min(cartItem.quantity.valueOf() + 1, 10);
             return { ...cartItem, quantity: newQuantity };
           }
@@ -55,7 +55,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
 
   const removeFromCart = (_id: string) => {
     setCartItems((prevItems) => {
-      const updatedCartItems = prevItems.filter((cartItem) => cartItem.menuItem._id !== _id);
+      const updatedCartItems = prevItems.filter((cartItem) => cartItem.menuItem?._id !== _id);
       localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
       return updatedCartItems;
     });
@@ -64,7 +64,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   const updateQuantity = (_id: string, quantity: number) => {
     setCartItems((prevItems) => {
       const updatedCartItems = prevItems.map((cartItem) =>
-        (cartItem.menuItem._id === _id ? { ...cartItem, quantity } : cartItem)
+        (cartItem.menuItem?._id === _id ? { ...cartItem, quantity } : cartItem)
       );
       localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
       return updatedCartItems;
