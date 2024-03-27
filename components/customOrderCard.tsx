@@ -129,7 +129,7 @@ export default function CustomOrderCard() {
             <CardFooter className="gap-3 w-full justify-between">
                 <div className="flex flex-1 justify-center">
                     <Button color="primary" size="lg">
-                        Start Customizing
+                        Add to Cart
                     </Button>
                 </div>
             </CardFooter>

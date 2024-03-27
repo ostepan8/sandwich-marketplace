@@ -1,31 +1,31 @@
 import { Schema, model, models } from "mongoose";
 import mongoose from "mongoose";
 const menuItemSchema = new Schema({
-    name: {
-      type: String,
-      required: true,
+  name: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String, // Description isn't always required, so 'required: false' is omitted (it's false by default)
+  },
+  basePrice: {
+    type: Number,
+    required: true,
+    min: 0, // Ensure no negative prices
+  },
+  ingredients: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: "Ingredient",
     },
-    description: {
-      type: String, // Description isn't always required, so 'required: false' is omitted (it's false by default)
-    },
-    basePrice: {
-      type: Number,
-      required: true,
-      min: 0, // Ensure no negative prices
-    },
-    ingredients: [
-      {
-        type: mongoose.Types.ObjectId,
-        ref: "Ingredient",
-      },
-    ],
-    available: {
-      type: Boolean,
-      required: true,
-      default: true, // Use this to indicate if a menu item is currently available
-    },
-  });
-  
-const Ingredient = models?.MenuItem || model("MenuItem", menuItemSchema);
+  ],
+  available: {
+    type: Boolean,
+    required: true,
+    default: true, // Use this to indicate if a menu item is currently available
+  },
+});
 
-export default Ingredient;
+const MenuItem = models?.MenuItem || model("MenuItem", menuItemSchema);
+
+export default MenuItem;

@@ -210,7 +210,8 @@ export default function MenuScreen(props: IAppProps) {
                             (type === "Bread") ?
                                 <div key={type.valueOf()} className="flex-1 min-w-[280px] max-w-xs md:max-w-none py-4 px-2 md:px-4">
                                     <Select
-                                        onChange={(e) => console.log(e.target.value)}
+                                        onChange={(event) => handleIngredientChange(breadItems.filter(item => item.name === event.target.value)[0])}
+
                                         variant="underlined"
                                         size="lg"
                                         label="Select bread type"

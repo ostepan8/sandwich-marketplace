@@ -44,12 +44,16 @@ export default function MenuTab({ data, display = true, unavailableIngredients, 
 
     return (
         <Card className="w-full border-b py-4 flex flex-col items-center p-8 mb-8">
-            <div className="flex items-center justify-between w-full">
-                <div className="flex flex-row items-center">
+            <div className="flex md:flex-row flex-col items-center justify-between w-full">
+                <div className="flex w-full  flex-row items-center">
                     <h1 className={`${title()} mr-2`}>{data.name} - {data.basePrice.toString()}$</h1>
                 </div>
-
-                <div className="flex items-center ml-6">
+                <div className="flex flex-row flex-wrap w-full justify-start">
+                    <h1 className={subtitle()}>{ingredientsList}</h1>
+                    {unavailableInThisSandwich.length > 0 && (
+                        <h1 className={"text-red-500"}>Unavailable Ingredients: {unavailableInThisSandwich.join(', ')}</h1>)}
+                </div>
+                <div className="flex items-center ml-6 ">
                     <div className="mr-6 justify-center flex flex-col items-center gap-2">
                         <div>
                             <h1 className={subtitle()}>Available</h1>
@@ -85,11 +89,7 @@ export default function MenuTab({ data, display = true, unavailableIngredients, 
                         </Button>}
                 </div>
             </div>
-            <div className="flex flex-col justify-center w-full">
-                <h1 className={subtitle()}>{ingredientsList}</h1>
-                {unavailableInThisSandwich.length > 0 && (
-                    <h1 className={"text-red-500"}>Unavailable Ingredients: {unavailableInThisSandwich.join(', ')}</h1>)}
-            </div>
+
         </Card>
     );
 }

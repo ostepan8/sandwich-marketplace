@@ -17,7 +17,7 @@ export type MenuItem = {
     _id: String;
     name: String;
     description?: String;
-    basePrice: Number;
+    basePrice: number;
     ingredients: Ingredient[];
     available: Boolean;
 }
@@ -37,9 +37,15 @@ export interface MenuAndIngredientProps {
     type?: String
 }
 export interface CartItem {
-    menuItem: MenuItem;
-    quantity: Number;
+    menuItem?: MenuItem;  // This can be undefined if it's a custom item
+    customDetails?: {     // Details specific to custom sandwiches
+        name: string;
+        ingredients: string[];
+        price: number;
+    };
+    quantity: number;
 }
+
 
 
 export interface CartContextType {
@@ -48,4 +54,11 @@ export interface CartContextType {
     removeFromCart: (_id: string) => void;
     updateQuantity: (_id: string, quantity: number) => void;
     clearCart: () => void;
+}
+export interface ITransaction {
+    createdAt: Date;
+    stripeId: string;
+    amount: number;
+    cartItems: CartItem[];
+    pickUpTime: string
 }
