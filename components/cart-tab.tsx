@@ -16,7 +16,7 @@ export const CartTab = ({ item }: Props) => {
     const handleDeleteItem = () => {
         setLoading(true)
         setTimeout(() => {
-            removeFromCart(item.menuItem._id.valueOf())
+            removeFromCart(item.menuItem?._id.valueOf() || "")
             setLoading(false);
             setCompleted(true)
             setTimeout(() => {
@@ -27,19 +27,19 @@ export const CartTab = ({ item }: Props) => {
     }
     const handleQuantityChange = (number: Number) => {
         setQuantity(number)
-        updateQuantity(item.menuItem._id.valueOf(), number.valueOf())
+        updateQuantity(item.menuItem?._id.valueOf() || "", number.valueOf())
 
     }
-    const ingredientsList = item.menuItem.ingredients.map(ingredient => ingredient.name).join(', ');
+    const ingredientsList = item.menuItem?.ingredients.map(ingredient => ingredient.name).join(', ');
 
     return <div className="w-full border-b py-4 flex flex-col items-center">
         <div className="flex items-center justify-between w-full">
             <div className="flex flex-row items-center">
-                <h1 className={`${title()} mr-2`}>{item.menuItem.name}</h1>
+                <h1 className={`${title()} mr-2`}>{item.menuItem?.name || ""}</h1>
             </div>
             <div className="flex items-center ml-6 w-full ">
                 <div className='mx-4 flex-1 flex'>
-                    <h1 className={subtitle()}>{ingredientsList.split("")}</h1>
+                    <h1 className={subtitle()}>{ingredientsList?.split("")}</h1>
                 </div>
                 <Select
                     onChange={(e) => handleQuantityChange(parseInt(e.target.value))}
@@ -54,7 +54,7 @@ export const CartTab = ({ item }: Props) => {
                     ))}
                 </Select>
                 <div className="mr-6">
-                    <h1 className={subtitle()}>{(item.menuItem.basePrice.valueOf() * item.quantity.valueOf()).toString()}$</h1>
+                    <h1 className={subtitle()}>{(item.menuItem?.basePrice.valueOf() || 0 * item.quantity.valueOf()).toString()}$</h1>
                 </div>
                 <div>
                     <Button isLoading={loading} onPress={handleDeleteItem} color={completed ? "success" : "danger"}>X</Button>
@@ -62,7 +62,7 @@ export const CartTab = ({ item }: Props) => {
             </div>
         </div>
         <div className="w-full pt-4">
-            <p className="text-left">{item.menuItem.description}</p>
+            <p className="text-left">{item.menuItem?.description}</p>
         </div>
     </div>
 
