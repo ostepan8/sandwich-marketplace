@@ -1,4 +1,4 @@
-import { Button, Switch } from "@nextui-org/react";
+import { Button, Card, CardHeader, Switch } from "@nextui-org/react";
 import { useState } from "react";
 import { CartContextType, Ingredient, MenuItem } from "@/constants/types"; // Correct import paths as necessary
 import { subtitle, title } from "@/components/primitives";
@@ -43,27 +43,25 @@ export default function MenuTab({ data, display = true, unavailableIngredients, 
         .map(ingredient => ingredient.name);
 
     return (
-        <div className="w-full border-b py-4 flex flex-col items-center">
+        <Card className="w-full border-b py-4 flex flex-col items-center p-8 mb-8">
             <div className="flex items-center justify-between w-full">
                 <div className="flex flex-row items-center">
-                    <h1 className={`${title()} mr-2`}>{data.name}</h1>
-                    <div className="flex flex-col justify-center ml-4">
-                        <h1 className={subtitle()}>{ingredientsList}</h1>
-                        {unavailableInThisSandwich.length > 0 && (
-                            <h1 className={"text-red-500"}>Unavailable Ingredients: {unavailableInThisSandwich.join(', ')}</h1>)}
-                    </div>
+                    <h1 className={`${title()} mr-2`}>{data.name} - {data.basePrice.toString()}$</h1>
                 </div>
 
                 <div className="flex items-center ml-6">
-                    <div className="mr-6">
-                        <h1 className={subtitle()}>Available</h1>
+                    <div className="mr-6 justify-center flex flex-col items-center gap-2">
+                        <div>
+                            <h1 className={subtitle()}>Available</h1>
+                        </div>
+
                         <Switch
                             isReadOnly={display.valueOf()}
                             isSelected={available}
                             onValueChange={(e) => handleAvailabilityChange(e)}
-                            className="mr-2" // Add some space between the Switch and the Button
                         />
                     </div>
+
                     {!display ? <Button onPress={handleDeleteMenuItem}>Delete</Button> :
                         <Button isLoading={isLoading} onPress={async () => {
                             setIsLoading(true); // Turn on loading
@@ -78,18 +76,20 @@ export default function MenuTab({ data, display = true, unavailableIngredients, 
                                 setAdded(true)
                                 setTimeout(() => {
                                     setAdded(false);
-                                }, 250);
+                                }, 400);
 
                             }, 100);
                         }
                         } color={added ? "success" : "primary"}>
-                            {added ? "✔" : data.basePrice.toString() + "$"}
+                            {added ? "✔" : "Add to Cart"}
                         </Button>}
                 </div>
             </div>
-            <div className="w-full pt-4">
-                <p className="text-left">{data.description}</p>
+            <div className="flex flex-col justify-center w-full">
+                <h1 className={subtitle()}>{ingredientsList}</h1>
+                {unavailableInThisSandwich.length > 0 && (
+                    <h1 className={"text-red-500"}>Unavailable Ingredients: {unavailableInThisSandwich.join(', ')}</h1>)}
             </div>
-        </div>
+        </Card>
     );
 }

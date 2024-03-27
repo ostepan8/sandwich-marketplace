@@ -58,7 +58,10 @@ export default function MenuPage() {
             <div className='my-8'>
                 <h1 className={title()}>What would you like?</h1>
             </div>
-            <CustomOrderCard />
+            <div className='mb-10'>
+                <CustomOrderCard />
+            </div>
+
 
             {data.map((item: MenuItem) => {
                 return (

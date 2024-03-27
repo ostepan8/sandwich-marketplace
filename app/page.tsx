@@ -14,13 +14,12 @@ export default function Home() {
 			</div>
 
 			<div className="flex gap-3">
-				<Link
-					isExternal
-				>
-					<Button radius="md" size='lg' className="bg-gradient-to-tr from-[#9d1f2b] to-[#9d1f2b] text-white shadow-lg px-20">
+				<Link href="/menu" >
+					<Button className="bg-gradient-to-tr from-[#9d1f2b] to-[#9d1f2b] text-white shadow-lg px-20 inline-block">
 						See Menu
 					</Button>
 				</Link>
+
 			</div>
 		</section>
 	);

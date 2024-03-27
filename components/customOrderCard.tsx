@@ -86,15 +86,14 @@ export default function CustomOrderCard() {
                     </div>
                 </div>
                 <div>
-                    <h4 className=" text-5xl font-semibold leading-none text-default-600">{"12$"}</h4>
+                    <h4 className={title()}>{"12$"}</h4>
                 </div>
             </CardHeader>
             <CardBody className="px-3 py-0 text-small text-default-400">
-
                 <div className="flex flex-col md:flex-row md:flex-wrap md:justify-between h-full">
                     {INGREDIENT_TYPES.map((type: String) => (
                         (type === "Bread") ?
-                            <div key={type.valueOf()} className="flex-1 min-w-[280px] max-w-xs md:max-w-none py-4 px-2 md:px-4">
+                            <div key={type.valueOf()} className="flex-1 min-w-[200px] max-w-xs md:max-w-none py-4 px-2 md:px-4">
                                 <Select
                                     onChange={(e) => console.log(e.target.value)}
                                     variant="underlined"

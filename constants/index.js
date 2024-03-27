@@ -8,8 +8,8 @@ export const FOOTER_LINKS = [
 export const FOOTER_CONTACT_INFO = {
   title: "Contact Us",
   links: [
-    { label: "Phone", value: "312-982-9808" },
-    { label: "Email", value: "xxxx@xxx.com" },
+    { label: "Phone", value: "773-610-7977" },
+    { label: "Email", value: "npasquale24@berkshireschool.org" },
   ],
 };
 
@@ -20,7 +20,6 @@ export const SOCIALS = {
       icon: "/instagram.svg",
       link: "https://www.instagram.com/feedappofficial/",
     },
-    { icon: "/tiktok.png", link: "https://www.tiktok.com/@thefeedapp" },
   ],
 };
 export const INGREDIENT_DATA = {
