@@ -35,7 +35,6 @@ export async function checkoutTransaction(transaction: ITransaction) {
   }
   const session = await stripe.checkout.sessions.create({
     line_items: transaction.cartItems.map((item) => createLineItem(item)),
-    expand: ["line_items"],
     metadata: {
       pickUpTime: transaction.pickUpTime,
     },

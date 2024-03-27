@@ -19,35 +19,16 @@ async function POST(request) {
   // Get the ID and type
   const eventType = event.type;
 
-  // Function to transform line items from the Stripe format to your cart item format
-  const transformLineItemsToCartItems = (lineItems) => {
-    if (!lineItems) return []; // If lineItems is undefined, return empty array
-
-    // Assuming lineItems.data is the array we need
-    return lineItems.data.map((item) => {
-      // Here you would map properties of LineItem to fit the CartItem structure
-      // Adjust this transformation based on your actual data structures
-      return {
-        menuItem: {
-          _id: item.menuItem ? item.menuItem._id : "",
-          name: item.menuItem ? item.menuItem.description : "",
-          basePrice: item.menuItem ? item.menuItem.basePrice / 100 : 0, // Assuming Stripe provides amounts in cents
-          description: "",
-          ingredients: [],
-          available: true,
-        },
-        quantity: item.quantity,
-      };
-    });
-  };
-
+  const lineItems = await stripe.checkout.sessions.listLineItems("cs_test_123");
+  console.log(lineItems);
+  console.log(lineItems.data);
   if (eventType === "checkout.session.completed") {
-    const { id, amount_total, metadata, line_items } = event.data.object;
+    const { id, amount_total, metadata } = event.data.object;
     const transaction = {
       createdAt: new Date(),
       stripeId: id,
       amount: amount_total ? amount_total : 0,
-      cartItems: transformLineItemsToCartItems(line_items),
+      cartItems: lineItems.data,
       pickUpTime: metadata ? metadata.pickUpTime : "",
       completed: false,
     };
