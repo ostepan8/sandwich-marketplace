@@ -19,11 +19,11 @@ async function POST(request) {
   // Get the ID and type
   const eventType = event.type;
 
-  const lineItems = await stripe.checkout.sessions.listLineItems("cs_test_123");
-  console.log(lineItems);
-  console.log(lineItems.data);
   if (eventType === "checkout.session.completed") {
     const { id, amount_total, metadata } = event.data.object;
+    const lineItems = await stripe.checkout.sessions.listLineItems(id);
+    console.log(lineItems);
+    console.log(lineItems.data);
     const transaction = {
       createdAt: new Date(),
       stripeId: id,
