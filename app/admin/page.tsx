@@ -79,7 +79,7 @@ export default function AdminPage() {
         }
     };
 
-    if (loading) return <div className="h-screen w-full ">
+    if (loading) return <div className="h-screen w-full p-8">
         <h1 className={title()}>Loading...</h1>
         <div className="my-32">
             <Progress isIndeterminate />
@@ -88,7 +88,7 @@ export default function AdminPage() {
 
     </div>;
     if (!authenticated) return (
-        <div className="flex-1 flex-col flex justify-center items-center ">
+        <div className="flex-1 flex-col flex justify-center items-center p=8 ">
             <h1 className={title()}>Admin Sign In</h1>
             <div className="w-[50%] justify-center items-center">
                 <h1 className={subtitle()}>Username</h1>
@@ -106,7 +106,7 @@ export default function AdminPage() {
         </div>
     );
     if (authenticated) return (
-        <div className="w-full flex flex-col">
+        <div className="w-full flex flex-col p-8">
             <div className="mb-10">
                 <h1 className={title()}>Hey there!</h1>
             </div>
