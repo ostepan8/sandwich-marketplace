@@ -27,6 +27,9 @@ async function POST(request) {
     });
     console.log(line_items);
     console.log(line_items.data, "line data");
+    for (let item in line_items.data) {
+      console.log(item.product, "prod");
+    }
 
     const session = await stripe.checkout.sessions.retrieve(id);
     console.log(session, "session");

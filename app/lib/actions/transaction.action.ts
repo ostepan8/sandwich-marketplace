@@ -27,6 +27,7 @@ export async function checkoutTransaction(transaction: ITransaction) {
             .join(", "),
           name: item.menuItem?.name.valueOf() || "",
           metadata: {
+            name: item.menuItem?.name.valueOf() || "",
             ingredients: item.menuItem
               ? item.menuItem.ingredients.map((item) => item._id).join()
               : "",
