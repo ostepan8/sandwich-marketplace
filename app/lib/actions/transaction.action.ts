@@ -28,13 +28,14 @@ export async function checkoutTransaction(transaction: ITransaction) {
         unit_amount: itemAmount,
         product_data: {
           name: name,
+          metadata: {
+            ingredients:
+              item.menuItem?.ingredients.map((item) => item._id).join() || "",
+          },
           description: item.menuItem?.ingredients
             .map((item) => item.name)
             .join(),
         },
-      },
-      metadata: {
-        ingredients: item.menuItem?.ingredients.map((item) => item._id).join(),
       },
       quantity: item.quantity,
     };
