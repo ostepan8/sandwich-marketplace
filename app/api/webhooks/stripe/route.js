@@ -29,7 +29,8 @@ async function POST(request) {
     const lineData = line_items.data;
     const cartItemData = [];
     for (let i = 0; i < lineData.length; i++) {
-      const itemMetaData = lineData[i].price.product.metaData;
+      const itemMetaData = lineData[i].price.product.metadata;
+      console.log(itemMetaData);
       const ingredients = itemMetaData.ingredients;
       const ingredientIdArray = ingredients
         .split(",")
