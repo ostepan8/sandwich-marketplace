@@ -34,7 +34,7 @@ export async function checkoutTransaction(transaction: ITransaction) {
           },
           description: item.menuItem?.ingredients
             .map((item) => item.name)
-            .join(),
+            .join(", "),
         },
       },
       quantity: item.quantity,
