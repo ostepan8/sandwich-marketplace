@@ -18,7 +18,6 @@ export async function checkoutTransaction(transaction: ITransaction) {
   for (let item of cartItems) {
     const lineItem: LineItem = {
       quantity: item.quantity,
-      price: ((item.menuItem?.basePrice || 0) * 100).toString(),
       price_data: {
         currency: "usd",
         product_data: {
