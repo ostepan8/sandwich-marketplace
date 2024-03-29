@@ -29,7 +29,8 @@ async function POST(request) {
     const lineData = line_items.data;
     console.log(lineData);
     for (let i = 0; i < lineData.length; i++) {
-      console.log(item[i]);
+      console.log(lineData[i]);
+      console.log(lineData[i].price);
     }
 
     const session = await stripe.checkout.sessions.retrieve(id);
