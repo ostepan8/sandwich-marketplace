@@ -10,38 +10,34 @@ import Ingredient from "../database/models/ingredient.model";
 import MenuItem from "../database/models/menuitem.model";
 
 export async function checkoutTransaction(transaction: ITransaction) {
+  type LineItem = Stripe.Checkout.SessionCreateParams.LineItem;
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-  function createLineItem(item: CartItem) {
-    const name: string = item.menuItem
-      ? item.menuItem.name.valueOf()
-      : item.customDetails
-      ? item.customDetails.name
-      : "name";
-    const itemAmount: number = item.menuItem
-      ? item.menuItem.basePrice * 100
-      : item.customDetails
-      ? item.customDetails.price * 100
-      : 0;
-    return {
+  const cartItems: CartItem[] = transaction.cartItems; // Assuming cartItems is an array of CartItem
+  const lineItems: LineItem[] = [];
+
+  for (let item of cartItems) {
+    const lineItem: LineItem = {
+      quantity: item.quantity,
+      price: ((item.menuItem?.basePrice || 0) * 100).toString(),
       price_data: {
         currency: "usd",
-        unit_amount: itemAmount,
         product_data: {
-          name: name,
+          description: item.menuItem?.ingredients
+            .map((item) => item.name)
+            .join(", "),
+          name: item.menuItem?.name.valueOf() || "",
           metadata: {
             ingredients:
               item.menuItem?.ingredients.map((item) => item._id).join() || "",
           },
-          description: item.menuItem?.ingredients
-            .map((item) => item.name)
-            .join(", "),
         },
       },
-      quantity: item.quantity,
     };
+    lineItems.push(lineItem);
   }
+
   const session = await stripe.checkout.sessions.create({
-    line_items: transaction.cartItems.map((item) => createLineItem(item)),
+    line_items: lineItems,
     metadata: {
       pickUpTime: transaction.pickUpTime,
     },
