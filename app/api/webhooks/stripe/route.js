@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+
 const { createTransaction } = require("@/app/lib/actions/transaction.action");
 const { NextResponse } = require("next/server");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
@@ -28,18 +29,7 @@ async function POST(request) {
       createdAt: new Date(),
       stripeId: id,
       amount: amount_total ? amount_total : 0,
-      cartItems: lineItems.data.map((item) => {
-        return {
-          menuItem: {
-            _id: "",
-            name: "",
-            description: "",
-            ingredients: [],
-            available: false,
-          },
-          quantity: item.quantity,
-        };
-      }),
+      cartItems: [],
       pickUpTime: metadata ? metadata.pickUpTime : "",
       completed: false,
     };

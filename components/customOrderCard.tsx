@@ -12,6 +12,8 @@ type MenuAndIngredientData = {
 }
 export default function CustomOrderCard() {
     const { addToCart } = useCart()
+    const [added, setAdded] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const [breadItems, setBreadItems] = useState<Ingredient[]>([]);
     const [cheeseItems, setCheeseItems] = useState<Ingredient[]>([]);
     const [meatItems, setMeatItems] = useState<Ingredient[]>([]);
@@ -188,8 +190,21 @@ export default function CustomOrderCard() {
             </CardBody>
             <CardFooter className="gap-3 w-full justify-between">
                 <div className="flex flex-1 justify-center">
-                    <Button onPress={() => addToCart({ ...newSandwichData, ingredients: newSandwichIngredients })} color="primary" size="lg">
-                        Add to Cart
+                    <Button isLoading={isLoading} onPress={async () => {
+
+                        setIsLoading(true); // Turn on loading
+                        setTimeout(() => {
+                            addToCart({ ...newSandwichData, ingredients: newSandwichIngredients });
+                            setIsLoading(false);
+                            setAdded(true)
+                            setTimeout(() => {
+                                setAdded(false);
+                            }, 400);
+
+                        }, 100);
+                    }
+                    } color={added ? "success" : "primary"}>
+                        {added ? "✔" : "Add to Cart"}
                     </Button>
                 </div>
             </CardFooter>

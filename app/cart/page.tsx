@@ -15,6 +15,9 @@ type Props = {
 }
 const Cart = () => {
     const [pickUpTime, setPickUpTime] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
+    const [added, setAdded] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("")
     useEffect(() => {
         loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
     }, []);
@@ -28,7 +31,7 @@ const Cart = () => {
     }, 0);
 
 
-    const handleCheckout = async ({ pickUpTime }: Props) => {
+    const handleCheckout = async () => {
         const transcation = {
             createdAt: new Date(),
             stripeId: '',
@@ -81,7 +84,7 @@ const Cart = () => {
             )}
             <div className='my-8 w-full flex justify-center items-center flex-col'>
                 {cartItems.length > 0 && <div className="w-full">
-                    <div className="flex justify-center items-center space-x-4 w-1/2 ml-auto mr-auto"> {/* This line ensures horizontal layout and spacing */}
+                    <div className="flex justify-center items-center space-x-4 w-[80%] sm:w-1/2 ml-auto mr-auto"> {/* This line ensures horizontal layout and spacing */}
                         <CheckboxGroup onChange={() => setPickUpTime("Now")} isDisabled={!isBetween5and7} label="Choose Pick Up Time" orientation="horizontal" color="secondary"
                             defaultValue={[isBetween5and7 ? "now" : "input"]}>
                             <Checkbox value="now">Now</Checkbox>
@@ -94,12 +97,32 @@ const Cart = () => {
                         </Select>
                     </div>
                 </div>}
-                {cartItems.length > 0 && <Button onClick={() => handleCheckout({ pickUpTime })} className='mt-4 p-16 rounded-3xl w-1/2'> {/* Adjusted margins and paddings as needed */}
+                {cartItems.length > 0 && <Button onClick={() => {
+                    if (pickUpTime == "") {
+                        setErrorMessage("Select a time to pick up your food.")
+                        return
+                    }
+                    setIsLoading(true); // Turn on loading
+                    setTimeout(() => {
+                        handleCheckout();
+                        setIsLoading(false);
+                        setAdded(true)
+                        setTimeout(() => {
+                            setAdded(false);
+                        }, 400);
+
+                    }, 100);
+
+
+                }} className='mt-4 p-16 rounded-3xl w-1/2'> {/* Adjusted margins and paddings as needed */}
                     <div>
-                        <div><h1 className={subtitle()}>Proceed to Checkout</h1></div>
-                        <div><h1 className={subtitle()}>{totalPrice}$</h1></div>
+                        <div><h1 className={"text-md"}>Proceed to Checkout</h1></div>
+                        <div><h1 className={"text-md"}>{totalPrice}$</h1></div>
                     </div>
                 </Button>}
+                {errorMessage && <div>
+                    <h1 className={"text-red-500"}>{errorMessage}</h1>
+                </div>}
             </div>
 
         </div>
