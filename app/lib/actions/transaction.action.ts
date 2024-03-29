@@ -20,6 +20,7 @@ export async function checkoutTransaction(transaction: ITransaction) {
       quantity: item.quantity,
       price_data: {
         currency: "usd",
+        unit_amount: item.menuItem?.basePrice,
         product_data: {
           description: item.menuItem?.ingredients
             .map((item) => item.name)
