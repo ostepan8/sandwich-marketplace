@@ -14,6 +14,10 @@ const CartItemSchema = new Schema(
         required: true,
       },
     ],
+    quantity: {
+      type: Number,
+      required: true,
+    },
   },
   { _id: false }
 ); // Optionally disable _id for subdocuments if not needed
@@ -45,6 +49,9 @@ const TransactionSchema = new Schema({
   email: {
     type: String,
     // If email is not always required, you can remove 'required: true'
+  },
+  name: {
+    type: String,
   },
 });
 

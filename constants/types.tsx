@@ -67,8 +67,17 @@ export interface DatabaseTransaction {
     createdAt: Date;
     stripeId: string;
     amount: number;
-    cartItems: CartItem[];
+    cartItems: {
+        name: string;
+        quantity: number,
+        ingredients: Ingredient[]
+    }[];
     pickUpTime: string;
     completed: boolean;
     email?: string;
+}
+export type GetAllDataToReturn = {
+    menuData: MenuItem[],
+    ingredientData: Ingredient[],
+    transactions: DatabaseTransaction[]
 }

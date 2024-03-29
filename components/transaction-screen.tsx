@@ -37,13 +37,13 @@ const TransactionScreen = ({ data }: TransactionProps) => {
                     </CardHeader>
                     <CardBody>
                         <h3 className='text-md font-semibold mb-2'>Order Details</h3>
-                        {/* <ul>
+                        <ul>
                             {transaction.cartItems.map((item, itemIndex) => (
                                 <li key={itemIndex} className='list-disc ml-4'>
-                                    {item.menuItem?.name} - Quantity: {item.quantity}
+                                    {item.name} - Quantity: {item.quantity}
                                 </li>
                             ))}
-                        </ul> */}
+                        </ul>
                     </CardBody>
                 </Card>
             ))}

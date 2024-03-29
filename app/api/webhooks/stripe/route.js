@@ -34,10 +34,11 @@ async function POST(request) {
       cartItemData.push({
         ingredients: ingredientIdArray,
         name: itemMetaData.name,
+        quantity: lineData[i].quantity,
       });
     }
     const session = await stripe.checkout.sessions.retrieve(id);
-    console.log(session);
+
     const transaction = {
       createdAt: new Date(),
       stripeId: id,
@@ -45,6 +46,8 @@ async function POST(request) {
       cartItems: cartItemData,
       pickUpTime: metadata ? metadata.pickUpTime : "",
       completed: false,
+      name: session.customer_details.name,
+      email: session.customer_details.email,
     };
     const newTransaction = await createTransaction(transaction);
     return NextResponse.json({ message: "OK", transaction: newTransaction });

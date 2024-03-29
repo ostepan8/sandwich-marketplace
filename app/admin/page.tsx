@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Input, Button, Tab, Tabs, Progress } from "@nextui-org/react";
 import IngredientScreen from "@/components/ingredient-screen";
 import { useAuth } from "@/context/AuthContext";
-import { Ingredient, DatabaseTransaction, MenuItem } from "@/constants/types";
+import { Ingredient, DatabaseTransaction, MenuItem, GetAllDataToReturn } from "@/constants/types";
 import MenuScreen from "@/components/menu-screen";
 import { adminLogin } from "../lib/actions/admin.actions";
 import { getAllData } from "../lib/actions/transaction.action";
@@ -33,22 +33,18 @@ export default function AdminPage() {
     }, [])
 
     const fetchMenuDataAndMenuData = async () => {
-        setFetchingData(true); // Assuming you want to indicate data is being fetched
+        setFetchingData(true);
 
         try {
-            // Await the async function to get menu and ingredient data
-            const { menuData, ingredientData, transactions } = await getAllData();
-            console.log(transactions)
+            const { menuData, ingredientData, transactions }: GetAllDataToReturn = await getAllData();
             setTransactionData(transactions)
-            // Set the data received to your state
             setMenuData(menuData);
             setIngredientData(ingredientData);
         } catch (error) {
-            // Log and set error message if there is an issue in fetching
+
             console.error(error); // More informative for debugging
             setErrorMessage("There was an error, please try again");
         } finally {
-            // Indicate that data fetching has completed
             setFetchingData(false);
         }
     };

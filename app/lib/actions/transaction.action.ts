@@ -5,9 +5,16 @@ import Stripe from "stripe";
 import { handleError } from "./admin.actions";
 import { connectToDatabase } from "../database/mongoose";
 import Transaction from "../database/models/transaction.model";
-import { CartItem, ITransaction } from "@/constants/types";
-import Ingredient from "../database/models/ingredient.model";
-import MenuItem from "../database/models/menuitem.model";
+import {
+  CartItem,
+  DatabaseTransaction,
+  GetAllDataToReturn,
+  Ingredient,
+  ITransaction,
+  MenuItem,
+} from "@/constants/types";
+import IngredientDatabase from "../database/models/ingredient.model";
+import MenuItemDatabase from "../database/models/menuitem.model";
 
 export async function checkoutTransaction(transaction: ITransaction) {
   type LineItem = Stripe.Checkout.SessionCreateParams.LineItem;
@@ -61,6 +68,7 @@ export async function createTransaction(transaction: ITransaction) {
     handleError(error);
   }
 }
+
 export async function getTransactions() {
   // Removed parameter as it seems unused based on provided context
   try {
@@ -72,18 +80,23 @@ export async function getTransactions() {
     handleError(error);
   }
 }
-export async function getAllData() {
+// Assuming GetAllDataToReturn, MenuItem, Ingredient, and DatabaseTransaction are defined appropriately
+
+export async function getAllData(): Promise<GetAllDataToReturn> {
   try {
     await connectToDatabase();
-    // Create a new transaction with a buyerId
-    const transactions = await Transaction.find({}).sort({ completed: 1 }); // Sorting by 'completed': false values first
-    console.log(transactions);
-    const menuData = await MenuItem.find().populate("ingredients");
-    const ingredientData = await Ingredient.find();
-    return JSON.parse(
-      JSON.stringify({ menuData, ingredientData, transactions })
-    );
+    const transactions: DatabaseTransaction[] = await Transaction.find({})
+      .sort({ completed: 1 })
+      .populate("cartItems.ingredients")
+      .lean();
+
+    const menuData: MenuItem[] = await MenuItemDatabase.find()
+      .populate("ingredients")
+      .lean();
+    const ingredientData: Ingredient[] = await IngredientDatabase.find().lean();
+    return { menuData, ingredientData, transactions };
   } catch (error) {
     handleError(error);
+    return { menuData: [], ingredientData: [], transactions: [] };
   }
 }
