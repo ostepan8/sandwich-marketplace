@@ -27,8 +27,9 @@ export async function checkoutTransaction(transaction: ITransaction) {
             .join(", "),
           name: item.menuItem?.name.valueOf() || "",
           metadata: {
-            ingredients:
-              item.menuItem?.ingredients.map((item) => item._id).join() || "",
+            ingredients: item.menuItem
+              ? item.menuItem.ingredients.map((item) => item._id).join()
+              : "",
           },
         },
       },

@@ -24,7 +24,10 @@ async function POST(request) {
     const { id, amount_total, metadata } = event.data.object;
     const lineItems = await stripe.checkout.sessions.listLineItems(id);
     console.log(lineItems);
-    console.log(lineItems.data);
+    console.log(lineItems.data, "line data");
+
+    const session = await stripe.checkout.sessions.retrieve(id);
+    console.log(session, "session");
     const transaction = {
       createdAt: new Date(),
       stripeId: id,
