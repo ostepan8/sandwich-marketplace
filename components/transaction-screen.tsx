@@ -1,61 +1,55 @@
-import { ITransaction } from '@/constants/types';
+import { DatabaseTransaction } from '@/constants/types';
 import React from 'react';
 import { title } from './primitives';
 import { Card, CardBody, CardHeader } from '@nextui-org/react';
 
 type TransactionProps = {
-    data: ITransaction[];
+    data: DatabaseTransaction[];
 };
 
 const TransactionScreen = ({ data }: TransactionProps) => {
-    const options: Intl.DateTimeFormatOptions = {
+    const currencyFormatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    });
+    console.log(data[0])
+
+    const dateFormatter = new Intl.DateTimeFormat('en-US', {
         hour: 'numeric',
         minute: 'numeric',
         month: 'long',
         day: 'numeric',
         hour12: true,
-    };
+    });
 
     return (
-        <div className='w-full justify-center align-center flex mt-6'>
-            {data.map((item, index) => {
-                // Ensure createdAt is a Date object
-                const date = new Date(item.createdAt);
-                return (
-                    <Card key={index} className='w-1/2 md:w-1/4 mx-10'> {/* Add a key for each item */}
-                        <CardHeader className='w-full flex flex-row'>
-                            <div>
-                                <h1>{new Intl.DateTimeFormat('en-US', options).format(date)}</h1>
-                            </div>
-                            <div className='ml-auto'>
-                                <h1>{item.amount / 100}$</h1>
-                            </div>
-                        </CardHeader>
+        <div className='flex flex-col items-center mt-6 w-full'>
+            {data.map((transaction, index) => (
+                <Card key={index} className='mb-4 w-full max-w-xl px-5 py-3'>
+                    <CardHeader className='flex justify-between items-center'>
                         <div>
-                            <h1 className={title()}>{item.pickUpTime}</h1>
+                            <h2 className='text-lg'>Ordered At: {dateFormatter.format(new Date(transaction.createdAt))}</h2>
+                            <h2 className='text-lg'>Pick Up Time: {transaction.pickUpTime}</h2>
                         </div>
-                        <CardBody>
-                            <h1>Order</h1>
-                            {item.cartItems.map((item, index) => {
-                                return (
-                                    <div key={index}>
-                                        <h1>
-                                            {index + 1}. {item.menuItem?.name}
-                                        </h1>
-                                        <h2>
-                                            {item.menuItem?.ingredients.join()}
-                                        </h2>
-                                    </div>
-                                )
-                            })}
-
-
-                        </CardBody>
-                    </Card>
-                );
-            })}
+                        <div>
+                            <h2 className='text-lg'>{currencyFormatter.format(transaction.amount / 100)}</h2>
+                        </div>
+                    </CardHeader>
+                    <CardBody>
+                        <h3 className='text-md font-semibold mb-2'>Order Details</h3>
+                        {/* <ul>
+                            {transaction.cartItems.map((item, itemIndex) => (
+                                <li key={itemIndex} className='list-disc ml-4'>
+                                    {item.menuItem?.name} - Quantity: {item.quantity}
+                                </li>
+                            ))}
+                        </ul> */}
+                    </CardBody>
+                </Card>
+            ))}
         </div>
     );
 };
 
 export default TransactionScreen;
+

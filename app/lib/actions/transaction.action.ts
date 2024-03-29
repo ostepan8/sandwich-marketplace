@@ -77,6 +77,7 @@ export async function getAllData() {
     await connectToDatabase();
     // Create a new transaction with a buyerId
     const transactions = await Transaction.find({}).sort({ completed: 1 }); // Sorting by 'completed': false values first
+    console.log(transactions);
     const menuData = await MenuItem.find().populate("ingredients");
     const ingredientData = await Ingredient.find();
     return JSON.parse(

@@ -63,3 +63,12 @@ export interface ITransaction {
     pickUpTime: string
     completed: boolean
 }
+export interface DatabaseTransaction {
+    createdAt: Date;
+    stripeId: string;
+    amount: number;
+    cartItems: CartItem[];
+    pickUpTime: string;
+    completed: boolean;
+    email?: string;
+}

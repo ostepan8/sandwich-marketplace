@@ -16,21 +16,17 @@ async function POST(request) {
   } catch (err) {
     return NextResponse.json({ message: "Webhook error", error: err.message });
   }
-
   // Get the ID and type
   const eventType = event.type;
-
   if (eventType === "checkout.session.completed") {
     const { id, amount_total, metadata } = event.data.object;
     const line_items = await stripe.checkout.sessions.listLineItems(id, {
       expand: ["data.price.product"],
     });
-
     const lineData = line_items.data;
     const cartItemData = [];
     for (let i = 0; i < lineData.length; i++) {
       const itemMetaData = lineData[i].price.product.metadata;
-      console.log(itemMetaData);
       const ingredients = itemMetaData.ingredients;
       const ingredientIdArray = ingredients
         .split(",")
@@ -40,9 +36,8 @@ async function POST(request) {
         name: itemMetaData.name,
       });
     }
-
     const session = await stripe.checkout.sessions.retrieve(id);
-    console.log(session, "session");
+    console.log(session);
     const transaction = {
       createdAt: new Date(),
       stripeId: id,
@@ -51,12 +46,9 @@ async function POST(request) {
       pickUpTime: metadata ? metadata.pickUpTime : "",
       completed: false,
     };
-
     const newTransaction = await createTransaction(transaction);
-
     return NextResponse.json({ message: "OK", transaction: newTransaction });
   }
-
   return new Response("", { status: 200 });
 }
 

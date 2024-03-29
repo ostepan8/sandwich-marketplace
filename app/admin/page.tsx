@@ -2,13 +2,11 @@
 "use client"
 import { subtitle, title } from "@/components/primitives";
 import { useEffect, useState } from "react";
-import { Card, CardBody, Input, Button, Tab, Tabs, Progress } from "@nextui-org/react";
-import { siteConfig } from "@/config/site";
+import { Input, Button, Tab, Tabs, Progress } from "@nextui-org/react";
 import IngredientScreen from "@/components/ingredient-screen";
 import { useAuth } from "@/context/AuthContext";
-import { Ingredient, ITransaction, MenuItem } from "@/constants/types";
+import { Ingredient, DatabaseTransaction, MenuItem } from "@/constants/types";
 import MenuScreen from "@/components/menu-screen";
-import { getMenuAndIngredientData } from "../lib/actions/menu.actions";
 import { adminLogin } from "../lib/actions/admin.actions";
 import { getAllData } from "../lib/actions/transaction.action";
 import TransactionScreen from "@/components/transaction-screen";
@@ -21,7 +19,7 @@ export default function AdminPage() {
     const [password, setPassword] = useState("");
     const [ingredientData, setIngredientData] = useState<Ingredient[]>([])
     const [menuData, setMenuData] = useState<MenuItem[]>([])
-    const [transactionData, setTransactionData] = useState<ITransaction[]>([])
+    const [transactionData, setTransactionData] = useState<DatabaseTransaction[]>([])
     const [errorMessage, setErrorMessage] = useState("");
     useEffect(() => {
         fetchMenuDataAndMenuData()
@@ -40,6 +38,7 @@ export default function AdminPage() {
         try {
             // Await the async function to get menu and ingredient data
             const { menuData, ingredientData, transactions } = await getAllData();
+            console.log(transactions)
             setTransactionData(transactions)
             // Set the data received to your state
             setMenuData(menuData);

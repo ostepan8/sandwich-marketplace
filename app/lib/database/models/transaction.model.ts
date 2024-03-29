@@ -1,24 +1,24 @@
 import mongoose, { Schema, model, models } from "mongoose";
 
-// Define a schema that can handle both standard menu items and custom sandwiches
-const CartItemSchema = new Schema({
-  menuItem: {
-    type: Schema.Types.ObjectId, // Reference by ID for standard menu items
-    ref: "MenuItem", // Points to the MenuItem model
-    required: false, // Set to false because custom sandwiches might not have an existing MenuItem
+// Define the schema for a cart item
+const CartItemSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    ingredients: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Ingredient", // Assuming "Ingredient" is another model
+        required: true,
+      },
+    ],
   },
-  customDetails: {
-    name: { type: String, required: false }, // For custom sandwiches
-    ingredients: [{ type: String, required: false }], // List of ingredients for custom sandwiches
-    price: { type: Number, required: false }, // Price for custom sandwiches
-  },
-  quantity: {
-    type: Number,
-    required: true,
-    min: 1,
-  },
-});
+  { _id: false }
+); // Optionally disable _id for subdocuments if not needed
 
+// Define the transaction schema
 const TransactionSchema = new Schema({
   createdAt: {
     type: Date,
@@ -33,23 +33,10 @@ const TransactionSchema = new Schema({
     type: Number,
     required: true,
   },
-  cartItems: [
-    {
-      name: {
-        type: String,
-        required: true,
-      },
-      ingredients: [
-        {
-          type: mongoose.Types.ObjectId,
-          ref: "Ingredient",
-        },
-      ],
-    },
-  ],
+  cartItems: [CartItemSchema], // Embed the CartItem schema here
   completed: {
-    default: false,
     type: Boolean,
+    default: false,
   },
   pickUpTime: {
     type: String,
@@ -57,6 +44,7 @@ const TransactionSchema = new Schema({
   },
   email: {
     type: String,
+    // If email is not always required, you can remove 'required: true'
   },
 });
 
