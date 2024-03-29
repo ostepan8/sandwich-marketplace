@@ -22,9 +22,11 @@ async function POST(request) {
 
   if (eventType === "checkout.session.completed") {
     const { id, amount_total, metadata } = event.data.object;
-    const lineItems = await stripe.checkout.sessions.listLineItems(id);
-    console.log(lineItems);
-    console.log(lineItems.data, "line data");
+    const line_items = await stripe.checkout.sessions.listLineItems(id, {
+      expand: ["data.price.product"],
+    });
+    console.log(line_items);
+    console.log(line_items.data, "line data");
 
     const session = await stripe.checkout.sessions.retrieve(id);
     console.log(session, "session");
