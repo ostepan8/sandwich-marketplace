@@ -35,13 +35,28 @@ const TransactionSchema = new Schema({
   },
   cartItems: [
     {
-      type: mongoose.Types.ObjectId,
-      ref: "MenuItem",
+      name: {
+        type: String,
+        required: true,
+      },
+      ingredients: [
+        {
+          type: mongoose.Types.ObjectId,
+          ref: "Ingredient",
+        },
+      ],
     },
   ],
   completed: {
     default: false,
     type: Boolean,
+  },
+  pickUpTime: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
   },
 });
 

@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-
+import mongoose from "mongoose";
 const { createTransaction } = require("@/app/lib/actions/transaction.action");
 const { NextResponse } = require("next/server");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
@@ -27,10 +27,17 @@ async function POST(request) {
     });
 
     const lineData = line_items.data;
-    console.log(lineData);
+    const cartItemData = [];
     for (let i = 0; i < lineData.length; i++) {
-      console.log(lineData[i]);
-      console.log(lineData[i].price);
+      const itemMetaData = lineData[i].price.product.metaData;
+      const ingredients = itemMetaData.ingredients;
+      const ingredientIdArray = ingredients
+        .split(",")
+        .map((item) => new mongoose.Types.ObjectId(item));
+      cartItemData.push({
+        ingredients: ingredientIdArray,
+        name: itemMetaData.name,
+      });
     }
 
     const session = await stripe.checkout.sessions.retrieve(id);
@@ -39,7 +46,7 @@ async function POST(request) {
       createdAt: new Date(),
       stripeId: id,
       amount: amount_total ? amount_total : 0,
-      cartItems: [],
+      cartItems: cartItemData,
       pickUpTime: metadata ? metadata.pickUpTime : "",
       completed: false,
     };
