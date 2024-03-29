@@ -25,12 +25,11 @@ async function POST(request) {
     const line_items = await stripe.checkout.sessions.listLineItems(id, {
       expand: ["data.price.product"],
     });
-    console.log(line_items);
-    console.log(line_items.data, "line data");
-    for (let item in line_items.data) {
-      console.log(item);
-      console.log(item.price);
-      console.log(item.price.product);
+
+    const lineData = line_items.data;
+    console.log(lineData);
+    for (let i = 0; i < lineData.length; i++) {
+      console.log(item[i]);
     }
 
     const session = await stripe.checkout.sessions.retrieve(id);
