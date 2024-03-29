@@ -28,6 +28,7 @@ export async function checkoutTransaction(transaction: ITransaction) {
         unit_amount: itemAmount,
         product_data: {
           name: name,
+          ingredients: item.menuItem?.ingredients,
         },
       },
       quantity: item.quantity,

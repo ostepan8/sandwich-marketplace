@@ -65,7 +65,7 @@ const Cart = () => {
     const isBetween5and7 = hours >= 17 && hours < 19;
 
     return (
-        <div className='flex flex-1 flex-col'>
+        <div className='flex flex-1 flex-col p-8'>
             {cartItems.length === 0 ? (
                 <h1 className={title()}>Your cart is empty.</h1>
             ) : (
