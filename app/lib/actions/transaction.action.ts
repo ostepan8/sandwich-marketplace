@@ -29,9 +29,12 @@ export async function checkoutTransaction(transaction: ITransaction) {
         product_data: {
           name: name,
           description: item.menuItem?.ingredients
-            .map((item) => item._id)
+            .map((item) => item.name)
             .join(),
         },
+      },
+      metadata: {
+        ingredients: item.menuItem?.ingredients.map((item) => item._id).join(),
       },
       quantity: item.quantity,
     };
