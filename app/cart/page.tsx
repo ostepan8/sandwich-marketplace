@@ -22,7 +22,7 @@ const Cart = () => {
         loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
     }, []);
 
-    const { cartItems, removeFromCart, updateQuantity }: CartContextType = useCart();
+    const { cartItems, removeFromCart, clearCart }: CartContextType = useCart();
     const totalPrice = cartItems.reduce((total, item) => {
         const basePrice = typeof item.menuItem?.basePrice === 'number' ? item.menuItem.basePrice : 0;
         const quantity = typeof item.quantity === 'number' ? item.quantity : 0;
@@ -97,24 +97,25 @@ const Cart = () => {
                         </Select>
                     </div>
                 </div>}
-                {cartItems.length > 0 && <Button onClick={() => {
-                    if (pickUpTime == "") {
-                        setErrorMessage("Select a time to pick up your food.")
-                        return
-                    }
-                    setIsLoading(true); // Turn on loading
-                    setTimeout(() => {
-                        handleCheckout();
-                        setIsLoading(false);
-                        setAdded(true)
+                {cartItems.length > 0 && <Button color={added ? "success" : "primary"}
+                    onClick={() => {
+                        if (pickUpTime == "") {
+                            setErrorMessage("Select a time to pick up your food.")
+                            return
+                        }
+                        setIsLoading(true); // Turn on loading
                         setTimeout(() => {
-                            setAdded(false);
-                        }, 400);
+                            handleCheckout();
+                            setIsLoading(false);
+                            setAdded(true)
+                            setTimeout(() => {
+                                setAdded(false);
+                            }, 400);
 
-                    }, 100);
+                        }, 100);
 
 
-                }} className='mt-4 p-16 rounded-3xl w-1/2'> {/* Adjusted margins and paddings as needed */}
+                    }} className='mt-4 p-16 rounded-3xl w-1/2'> {/* Adjusted margins and paddings as needed */}
                     <div>
                         <div><h1 className={"text-md"}>Proceed to Checkout</h1></div>
                         <div><h1 className={"text-md"}>{totalPrice}$</h1></div>

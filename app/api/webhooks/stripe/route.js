@@ -1,12 +1,11 @@
 /* eslint-disable camelcase */
-import { useCart } from "@/context/CartContext";
+
 import mongoose from "mongoose";
 const { createTransaction } = require("@/app/lib/actions/transaction.action");
 const { NextResponse } = require("next/server");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 async function POST(request) {
-  const { clearCart } = useCart();
   const body = await request.text();
   const sig = request.headers.get("stripe-signature");
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -53,7 +52,6 @@ async function POST(request) {
     };
     const newTransaction = await createTransaction(transaction);
 
-    clearCart();
     return NextResponse.json({ message: "OK", transaction: newTransaction });
   }
   return new Response("", { status: 200 });

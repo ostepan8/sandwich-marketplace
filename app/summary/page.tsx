@@ -1,7 +1,17 @@
+'use client'
 import { subtitle, title } from '@/components/primitives';
-import React from 'react';
+import { useCart } from '@/context/CartContext';
+import React, { useEffect } from 'react';
 
 const Page = () => {
+    const { clearCart, cartItems } = useCart()
+    useEffect(() => {
+        if (cartItems.length > 0) {
+            clearCart()
+        }
+
+    }, [])
+
     return (
         <div className='w-[100vw] h-[60vh] p-8 flex flex-col justify-center items-center'>
             {/* Additional wrapper for horizontal centering */}
