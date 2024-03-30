@@ -38,6 +38,7 @@ export default function AdminPage() {
         try {
             const { menuData, ingredientData, transactions }: GetAllDataToReturn = await getAllData();
             setTransactionData(transactions)
+            console.log(transactions, "transactions")
             setMenuData(menuData);
             setIngredientData(ingredientData);
         } catch (error) {

@@ -1,9 +1,22 @@
-import React from 'react'
+import { subtitle, title } from '@/components/primitives';
+import React from 'react';
 
-const page = () => {
+const Page = () => {
     return (
-        <div>Order Summary</div>
-    )
+        <div className='w-[100vw] h-[60vh] p-8 flex flex-col justify-center items-center'>
+            {/* Additional wrapper for horizontal centering */}
+            <div className='text-center flex flex-col items-center'>
+                <h1 className={title()}>Pick up your order at&nbsp;</h1>
+                <h1 className={title({ color: "violet" })}>Dewindt Common Room&nbsp;</h1>
+                <h1 className={title()}>
+                    it will be ready soon!
+                </h1>
+            </div>
+            <h2 className={subtitle({ class: "mt-4 text-center" })}>
+                Thanks for ordering!
+            </h2>
+        </div>
+    );
 }
 
-export default page
+export default Page;

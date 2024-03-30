@@ -2,6 +2,7 @@ import { DatabaseTransaction } from '@/constants/types';
 import React from 'react';
 import { title } from './primitives';
 import { Card, CardBody, CardHeader } from '@nextui-org/react';
+import IngredientText from './ingredient-text';
 
 type TransactionProps = {
     data: DatabaseTransaction[];
@@ -12,7 +13,6 @@ const TransactionScreen = ({ data }: TransactionProps) => {
         style: 'currency',
         currency: 'USD',
     });
-    console.log(data[0])
 
     const dateFormatter = new Intl.DateTimeFormat('en-US', {
         hour: 'numeric',
@@ -21,6 +21,7 @@ const TransactionScreen = ({ data }: TransactionProps) => {
         day: 'numeric',
         hour12: true,
     });
+
 
     return (
         <div className='flex flex-col items-center mt-6 w-full'>
@@ -39,9 +40,15 @@ const TransactionScreen = ({ data }: TransactionProps) => {
                         <h3 className='text-md font-semibold mb-2'>Order Details</h3>
                         <ul>
                             {transaction.cartItems.map((item, itemIndex) => (
-                                <li key={itemIndex} className='list-disc ml-4'>
-                                    {item.name} - Quantity: {item.quantity}
-                                </li>
+                                <>
+
+                                    <li key={itemIndex} className='list-disc ml-4'>
+                                        {item.name} - Quantity: {item.quantity}
+                                    </li>
+                                    <li>
+                                        <IngredientText data={item.ingredients} />
+                                    </li>
+                                </>
                             ))}
                         </ul>
                     </CardBody>
@@ -52,4 +59,5 @@ const TransactionScreen = ({ data }: TransactionProps) => {
 };
 
 export default TransactionScreen;
+
 

@@ -4,6 +4,7 @@ import { CartContextType, Ingredient, MenuItem } from "@/constants/types"; // Co
 import { subtitle, title } from "@/components/primitives";
 import { useCart } from "@/context/CartContext";
 import { changeMenuItemAvailability, deleteMenuItem } from "@/app/lib/actions/menu.actions";
+import IngredientText from "./ingredient-text";
 
 type Props = {
     data: MenuItem,
@@ -33,8 +34,6 @@ export default function MenuTab({ data, display = true, unavailableIngredients, 
         setIsLoading(false); // Stop loading
         // Optionally, trigger re-fetching of menu items or update local state to reflect the change
     };
-    // Combine all ingredient names for display
-    const ingredientsList = data.ingredients.map(ingredient => ingredient.name).join(', ');
 
     // Check if the sandwich has unavailable ingredients
     const unavailableInThisSandwich = data.ingredients
@@ -49,7 +48,8 @@ export default function MenuTab({ data, display = true, unavailableIngredients, 
                     <h1 className={`${title()} mr-2`}>{data.name} - {data.basePrice.toString()}$</h1>
                 </div>
                 <div className="flex flex-row flex-wrap w-full justify-start">
-                    <h1 className={subtitle()}>{ingredientsList}</h1>
+                    <IngredientText data={data.ingredients} />
+
                     {unavailableInThisSandwich.length > 0 && (
                         <h1 className={"text-red-500"}>Unavailable Ingredients: {unavailableInThisSandwich.join(', ')}</h1>)}
                 </div>

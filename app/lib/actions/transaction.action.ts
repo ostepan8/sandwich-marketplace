@@ -80,15 +80,51 @@ export async function getTransactions() {
     handleError(error);
   }
 }
-// Assuming GetAllDataToReturn, MenuItem, Ingredient, and DatabaseTransaction are defined appropriately
 
 export async function getAllData(): Promise<GetAllDataToReturn> {
   try {
     await connectToDatabase();
-    const transactions: DatabaseTransaction[] = await Transaction.find({})
-      .sort({ completed: 1 })
-      .populate("cartItems.ingredients")
-      .lean();
+    const transactions: DatabaseTransaction[] = await Transaction.aggregate([
+      {
+        $lookup: {
+          from: "ingredients",
+          localField: "cartItems.ingredients",
+          foreignField: "_id",
+          as: "cartItemsPopulated",
+        },
+      },
+      {
+        $addFields: {
+          cartItems: {
+            $map: {
+              input: "$cartItems",
+              as: "item",
+              in: {
+                $mergeObjects: [
+                  "$$item",
+                  {
+                    ingredients: {
+                      $filter: {
+                        input: "$cartItemsPopulated",
+                        as: "ingredient",
+                        cond: {
+                          $in: ["$$ingredient._id", "$$item.ingredients"],
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          cartItemsPopulated: 0,
+        },
+      },
+    ]);
 
     const menuData: MenuItem[] = await MenuItemDatabase.find()
       .populate("ingredients")
