@@ -1,6 +1,5 @@
 import { DatabaseTransaction } from '@/constants/types';
 import React from 'react';
-import { title } from './primitives';
 import { Card, CardBody, CardHeader } from '@nextui-org/react';
 import IngredientText from './ingredient-text';
 
@@ -22,6 +21,13 @@ const TransactionScreen = ({ data }: TransactionProps) => {
         hour12: true,
     });
 
+    if (data.length === 0) {
+        return (
+            <div className='flex flex-col items-center mt-6 w-full'>
+                <h2>There are no orders right now.</h2>
+            </div>
+        );
+    }
 
     return (
         <div className='flex flex-col items-center mt-6 w-full'>
@@ -40,15 +46,14 @@ const TransactionScreen = ({ data }: TransactionProps) => {
                         <h3 className='text-md font-semibold mb-2'>Order Details</h3>
                         <ul>
                             {transaction.cartItems.map((item, itemIndex) => (
-                                <>
-
-                                    <li key={itemIndex} className='list-disc ml-4'>
+                                <React.Fragment key={itemIndex}>
+                                    <li className='list-disc ml-4'>
                                         {item.name} - Quantity: {item.quantity}
                                     </li>
                                     <li>
                                         <IngredientText data={item.ingredients} />
                                     </li>
-                                </>
+                                </React.Fragment>
                             ))}
                         </ul>
                     </CardBody>
@@ -59,5 +64,3 @@ const TransactionScreen = ({ data }: TransactionProps) => {
 };
 
 export default TransactionScreen;
-
-
