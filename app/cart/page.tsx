@@ -69,34 +69,30 @@ const Cart = () => {
 
 
     function generateTimeIntervals(openTime: string, closeTime: string) {
-        // Assuming EST is UTC-5. This might need adjustment for daylight saving time.
-        const estOffset = -5;
-        const nowUtc = new Date(new Date().toUTCString());
-        const nowEst = new Date(nowUtc.getTime() + estOffset * 3600 * 1000);
+        const estOffset = -5; // Adjust for Eastern Standard Time; consider daylight saving time as needed.
+        const now = new Date();
+        // Ensure we're working with EST by adjusting from UTC.
+        const nowEst = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (estOffset * 3600000));
 
-        // Initialize times array
-        const times = [];
+        const times = []; // This will store our time intervals.
+        // Convert the open and close times to Date objects on the current EST date.
         const openingTime = adjustDateForTime(nowEst, openTime);
         const closingTime = adjustDateForTime(nowEst, closeTime);
 
-        let currentTime = (nowEst > openingTime) ? nowEst : openingTime;
-        currentTime = new Date(currentTime.getTime());
-        currentTime.setMinutes(Math.ceil(currentTime.getMinutes() / 15) * 15);
+        // Start from the later of now or the opening time.
+        let currentTime = new Date(Math.max(nowEst, openingTime));
+        // Round up to the next 15-minute mark. This avoids infinite loops by ensuring we always advance.
+        currentTime.setMinutes(Math.ceil(currentTime.getMinutes() / 15) * 15, 0, 0);
 
-        while (true) {
-            // Check if adding 15 minutes would go past the closing time
+        while (currentTime < closingTime) {
+            // Before adding the time, ensure we're not adding a slot that's too late.
             if (new Date(currentTime.getTime() + 15 * 60000) > closingTime) {
                 break;
             }
 
             times.push(currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }));
 
-            // Stop the loop if the current time is the last 15-minute interval before closing
-            if (new Date(currentTime.getTime() + 15 * 60000) >= closingTime) {
-                break;
-            }
-
-            // Increment by 15 minutes
+            // Increment by 15 minutes for the next iteration.
             currentTime = new Date(currentTime.getTime() + 15 * 60000);
         }
 
@@ -104,11 +100,18 @@ const Cart = () => {
     }
 
     function adjustDateForTime(referenceDate: Date, timeString: string): Date {
+        // The convertTimeStringToDate function needs to properly adjust the reference date's time.
+        const [time, period] = timeString.split(' ');
+        let [hours, minutes] = time.split(':').map(Number);
+
+        if (period === 'PM' && hours < 12) hours += 12;
+        if (period === 'AM' && hours === 12) hours = 0;
+
         const adjustedDate = new Date(referenceDate);
-        const timeDate = convertTimeStringToDate(timeString);
-        adjustedDate.setHours(timeDate.getHours(), timeDate.getMinutes(), 0, 0);
+        adjustedDate.setHours(hours, minutes, 0, 0);
         return adjustedDate;
     }
+
 
     const times = generateTimeIntervals(openTime, closeTime)
 
