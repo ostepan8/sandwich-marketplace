@@ -2,7 +2,7 @@
 "use client"
 import { subtitle, title } from "@/components/primitives";
 import { useEffect, useState } from "react";
-import { Input, Button, Tab, Tabs, Progress } from "@nextui-org/react";
+import { Input, Button, Tab, Tabs, Progress, Select, SelectItem } from "@nextui-org/react";
 import IngredientScreen from "@/components/ingredient-screen";
 import { useAuth } from "@/context/AuthContext";
 import { Ingredient, DatabaseTransaction, MenuItem, GetAllDataToReturn } from "@/constants/types";
@@ -10,9 +10,11 @@ import MenuScreen from "@/components/menu-screen";
 import { adminLogin } from "../lib/actions/admin.actions";
 import { getAllData } from "../lib/actions/transaction.action";
 import TransactionScreen from "@/components/transaction-screen";
+import { insertOrUpdateTime } from "../lib/actions/settings.actions";
 
 export default function AdminPage() {
-
+    const [startTime, setStartTime] = useState('');
+    const [endTime, setEndTime] = useState('');
     const { signin, authenticated, loading, signout } = useAuth()
     const [fetchingData, setFetchingData] = useState(true)
     const [username, setUsername] = useState("");
@@ -25,6 +27,29 @@ export default function AdminPage() {
             currentTransactions.filter(transaction => transaction._id !== _id)
         );
     };
+
+    function generate30MinuteIntervals() {
+        const intervals = [];
+        const startTime = new Date();
+        startTime.setHours(0, 0, 0, 0); // Set start time to beginning of the day
+
+        const endTime = new Date();
+        endTime.setHours(23, 59, 59, 999); // Set end time to end of the day
+
+        let currentTime = new Date(startTime);
+
+        while (currentTime <= endTime) {
+            intervals.push(new Date(currentTime));
+            currentTime.setMinutes(currentTime.getMinutes() + 30); // Add 30 minutes
+        }
+
+        return intervals;
+    }
+
+    const intervals = generate30MinuteIntervals();
+    const formattedIntervals: string[] = intervals.map(interval =>
+        interval.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })
+    );
 
     const [errorMessage, setErrorMessage] = useState("");
     useEffect(() => {
@@ -54,6 +79,9 @@ export default function AdminPage() {
             setFetchingData(false);
         }
     };
+    async function handleChangeTime() {
+        await insertOrUpdateTime(startTime, endTime)
+    }
 
 
 
@@ -108,6 +136,30 @@ export default function AdminPage() {
         <div className="w-full flex flex-col p-8">
             <div className="mb-10">
                 <h1 className={title()}>Hey there!</h1>
+            </div>
+
+            <h1 className={subtitle() + "mb-8"}>Set Order Times</h1>
+
+
+
+            <div className="flex flex-row w-full sm:w-[75%] md:w-1/2 lg:w-1/3 justify-center items-center mb-8">
+                <Select placeholder="Current End Time: " className="mr-4"
+                    onChange={(event) => setStartTime(event.target.value)}
+                >
+                    {formattedIntervals.map(((item) => {
+                        return (
+                            <SelectItem key={item}>{item}</SelectItem>
+                        )
+                    }))}
+                </Select>
+                <Select placeholder="Current End Time: " onChange={(event) => setEndTime(event.target.value)}>
+                    {formattedIntervals.map(((item) => {
+                        return (
+                            <SelectItem key={item}>{item}</SelectItem>
+                        )
+                    }))}
+                </Select>
+                <Button className="ml-2 " onPress={handleChangeTime}>Add</Button>
             </div>
             <Tabs size="lg" aria-label="Options">
                 <Tab key="photos" title="Orders">

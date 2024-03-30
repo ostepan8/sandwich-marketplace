@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const settingsSchema = new mongoose.Schema(
   {
@@ -7,11 +7,11 @@ const settingsSchema = new mongoose.Schema(
       required: true,
     },
     openTime: {
-      type: Date,
+      type: String,
       required: true,
     },
     closeTime: {
-      type: Date,
+      type: String,
       required: true,
     },
   },
@@ -23,6 +23,7 @@ const settingsSchema = new mongoose.Schema(
 // Ensure there's only one document for each setting
 settingsSchema.index({ _id: 1 }, { unique: true });
 
-const Settings = mongoose.model("Settings", settingsSchema);
+const Settings =
+  mongoose.models?.Settings || mongoose.model("Settings", settingsSchema);
 
-module.exports = Settings;
+export default Settings;
