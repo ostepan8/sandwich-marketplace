@@ -4,13 +4,14 @@ import { useCart } from '@/context/CartContext';
 import React, { useEffect } from 'react';
 
 const Page = () => {
-    const { clearCart, cartItems } = useCart()
-    useEffect(() => {
-        if (cartItems.length > 0) {
-            clearCart()
-        }
+    const { clearCart, cartItems, loading } = useCart();
 
-    }, [])
+    useEffect(() => {
+        if (!loading && cartItems.length > 0) {
+            console.log('ran')
+            clearCart();
+        }
+    }, [loading]);
 
     return (
         <div className='w-[100vw] h-[60vh] p-8 flex flex-col justify-center items-center'>

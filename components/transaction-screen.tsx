@@ -1,7 +1,5 @@
 import { DatabaseTransaction } from '@/constants/types';
 import React from 'react';
-import { Card, CardBody, CardFooter, CardHeader, Switch } from '@nextui-org/react';
-import IngredientText from './ingredient-text';
 import OrderTab from './transaction-tab';
 
 type TransactionProps = {
@@ -20,7 +18,7 @@ const TransactionScreen = ({ data }: TransactionProps) => {
     }
 
     return (
-        <div className='flex flex-col items-center mt-6 w-full'>
+        <div className='flex flex-col items-center mt-6 w-full gap-4'>
             {data.map((transaction, index) => (
                 <OrderTab key={index} transaction={transaction} />
             ))}
