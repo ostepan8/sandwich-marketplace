@@ -64,6 +64,7 @@ export interface ITransaction {
     completed: boolean
 }
 export interface DatabaseTransaction {
+    _id: string;
     createdAt: Date;
     stripeId: string;
     amount: number;
@@ -75,6 +76,7 @@ export interface DatabaseTransaction {
     pickUpTime: string;
     completed: boolean;
     email?: string;
+    name?: string
 }
 export type GetAllDataToReturn = {
     menuData: MenuItem[],

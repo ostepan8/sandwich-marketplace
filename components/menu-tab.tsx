@@ -20,11 +20,8 @@ export default function MenuTab({ data, display = true, unavailableIngredients, 
     const [available, setAvailable] = useState<boolean>(data.available.valueOf());
 
     const handleAvailabilityChange = async (newAvailability: boolean) => {
-        // Update availability state
         setAvailable(newAvailability);
-        // Call API to update the database
         await changeMenuItemAvailability(data._id.valueOf());
-        console.log(`Updating availability to ${newAvailability} for ${data.name}`);
     };
 
     const handleDeleteMenuItem = async () => {

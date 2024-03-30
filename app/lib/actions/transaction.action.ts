@@ -136,3 +136,17 @@ export async function getAllData(): Promise<GetAllDataToReturn> {
     return { menuData: [], ingredientData: [], transactions: [] };
   }
 }
+export async function completeTransaction(_id: string, bool: boolean) {
+  try {
+    await connectToDatabase();
+    const updatedTransaction = await Transaction.findOneAndUpdate(
+      { _id: _id },
+      { $set: { completed: bool } },
+      { new: true }
+    );
+
+    return JSON.parse(JSON.stringify(updatedTransaction));
+  } catch (error) {
+    handleError(error);
+  }
+}

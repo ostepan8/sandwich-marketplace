@@ -90,7 +90,7 @@ const Cart = () => {
                             <Checkbox value="now">Now</Checkbox>
                         </CheckboxGroup>
 
-                        <Select onChange={(event) => setPickUpTime(times.filter(item => item === event.target.value)[0])} value="input" label="Only open 5pm-7pm)">
+                        <Select onChange={(event) => setPickUpTime(times.filter(item => item === event.target.value)[0])} value="input" label="Only open 5pm-7pm EST">
                             {times.map((time) => (
                                 <SelectItem key={time} value={time}>{time}</SelectItem>
                             ))}
