@@ -4,9 +4,10 @@ import OrderTab from './transaction-tab';
 
 type TransactionProps = {
     data: DatabaseTransaction[];
+    removeTransactionById: (id: string) => void
 };
 
-const TransactionScreen = ({ data }: TransactionProps) => {
+const TransactionScreen = ({ data, removeTransactionById }: TransactionProps) => {
 
 
     if (data.length === 0) {
@@ -20,7 +21,7 @@ const TransactionScreen = ({ data }: TransactionProps) => {
     return (
         <div className='flex flex-col items-center mt-6 w-full gap-4'>
             {data.map((transaction, index) => (
-                <OrderTab key={index} transaction={transaction} />
+                <OrderTab removeTransactionById={removeTransactionById} key={index} transaction={transaction} />
             ))}
         </div>
     );

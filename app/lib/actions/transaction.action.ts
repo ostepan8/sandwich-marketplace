@@ -197,3 +197,12 @@ export async function completeTransaction(_id: string, bool: boolean) {
     handleError(error);
   }
 }
+export async function handleRemove(_id: string) {
+  try {
+    await connectToDatabase();
+    const deletedTransaction = await Transaction.findOneAndDelete({ _id: _id });
+    return JSON.parse(JSON.stringify(deletedTransaction));
+  } catch (error) {
+    handleError(error);
+  }
+}

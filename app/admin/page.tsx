@@ -20,6 +20,12 @@ export default function AdminPage() {
     const [ingredientData, setIngredientData] = useState<Ingredient[]>([])
     const [menuData, setMenuData] = useState<MenuItem[]>([])
     const [transactionData, setTransactionData] = useState<DatabaseTransaction[]>([])
+    const removeTransactionById = (_id: string) => {
+        setTransactionData(currentTransactions =>
+            currentTransactions.filter(transaction => transaction._id !== _id)
+        );
+    };
+
     const [errorMessage, setErrorMessage] = useState("");
     useEffect(() => {
         fetchMenuDataAndMenuData()
@@ -28,7 +34,6 @@ export default function AdminPage() {
             setErrorMessage('')
             setIngredientData([])
             setMenuData([])
-
         }
     }, [])
 
@@ -80,8 +85,6 @@ export default function AdminPage() {
         <div className="my-32">
             <Progress isIndeterminate />
         </div>
-
-
     </div>;
     if (!authenticated) return (
         <div className="flex-1 flex-col flex justify-center items-center p=8 ">
@@ -108,7 +111,7 @@ export default function AdminPage() {
             </div>
             <Tabs size="lg" aria-label="Options">
                 <Tab key="photos" title="Orders">
-                    <TransactionScreen data={transactionData}></TransactionScreen>
+                    <TransactionScreen removeTransactionById={removeTransactionById} data={transactionData}></TransactionScreen>
                 </Tab>
                 <Tab key="menu" title="Menu Customizer" className="py-6" >
                     <MenuScreen data={menuData} setMenuData={setMenuData} ingredientData={ingredientData} />
