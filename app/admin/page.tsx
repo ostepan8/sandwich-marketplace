@@ -10,7 +10,7 @@ import MenuScreen from "@/components/menu-screen";
 import { adminLogin } from "../lib/actions/admin.actions";
 import { getAllData } from "../lib/actions/transaction.action";
 import TransactionScreen from "@/components/transaction-screen";
-import { insertOrUpdateTime } from "../lib/actions/settings.actions";
+import { getCurrentSettings, insertOrUpdateTime } from "../lib/actions/settings.actions";
 
 export default function AdminPage() {
     const [startTime, setStartTime] = useState('');
@@ -68,9 +68,12 @@ export default function AdminPage() {
         try {
             const { menuData, ingredientData, transactions }: GetAllDataToReturn = await getAllData();
             setTransactionData(transactions)
-            console.log(transactions, "transactions")
+
             setMenuData(menuData);
             setIngredientData(ingredientData);
+            const { openTime, closeTime } = await getCurrentSettings()
+            setStartTime(openTime)
+            setEndTime(closeTime)
         } catch (error) {
 
             console.error(error); // More informative for debugging
@@ -137,13 +140,9 @@ export default function AdminPage() {
             <div className="mb-10">
                 <h1 className={title()}>Hey there!</h1>
             </div>
-
             <h1 className={subtitle() + "mb-8"}>Set Order Times</h1>
-
-
-
-            <div className="flex flex-row w-full sm:w-[75%] md:w-1/2 lg:w-1/3 justify-center items-center mb-8">
-                <Select placeholder="Current End Time: " className="mr-4"
+            <div className="flex flex-row w-full sm:w-[75%] md:w-1/2 lg:w-2/5 justify-center items-center mb-8">
+                <Select placeholder={"Current End Time: " + startTime} className="mr-4"
                     onChange={(event) => setStartTime(event.target.value)}
                 >
                     {formattedIntervals.map(((item) => {
@@ -152,7 +151,7 @@ export default function AdminPage() {
                         )
                     }))}
                 </Select>
-                <Select placeholder="Current End Time: " onChange={(event) => setEndTime(event.target.value)}>
+                <Select placeholder={"Current End Time: " + endTime} onChange={(event) => setEndTime(event.target.value)}>
                     {formattedIntervals.map(((item) => {
                         return (
                             <SelectItem key={item}>{item}</SelectItem>
