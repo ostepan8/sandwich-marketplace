@@ -80,7 +80,7 @@ const Cart = () => {
         const closingTime = adjustDateForTime(nowEst, closeTime);
 
         // Start from the later of now or the opening time.
-        let currentTime = new Date(Math.max(nowEst, openingTime));
+        let currentTime = new Date(Math.max(nowEst.getTime(), openingTime.getTime()));
         // Round up to the next 15-minute mark. This avoids infinite loops by ensuring we always advance.
         currentTime.setMinutes(Math.ceil(currentTime.getMinutes() / 15) * 15, 0, 0);
 
