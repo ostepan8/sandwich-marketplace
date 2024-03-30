@@ -42,8 +42,8 @@ const OrderTab = ({ transaction }: Props) => {
                 </div>
             </div>
             <div className='flex flex-col justify-start w-full my-4'>
+                <h1 className='font-bold'>name: {transaction.name}</h1>
                 <h1 className='font-bold'>email: {transaction.email}</h1>
-                <h1 className='font-bold'>email: {transaction.name}</h1>
             </div>
 
 
