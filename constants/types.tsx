@@ -54,6 +54,7 @@ export interface CartContextType {
     removeFromCart: (_id: string) => void;
     updateQuantity: (_id: string, quantity: number) => void;
     clearCart: () => void;
+    loading: boolean
 }
 export interface ITransaction {
     createdAt: Date;

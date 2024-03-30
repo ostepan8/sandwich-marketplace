@@ -10,9 +10,6 @@ import { loadStripe } from '@stripe/stripe-js';
 import { checkoutTransaction } from '../lib/actions/transaction.action';
 
 
-type Props = {
-    pickUpTime: string
-}
 const Cart = () => {
     const [pickUpTime, setPickUpTime] = useState("")
     const [isLoading, setIsLoading] = useState(false)
@@ -117,8 +114,8 @@ const Cart = () => {
 
                     }} className='mt-4 p-16 rounded-3xl w-1/2'> {/* Adjusted margins and paddings as needed */}
                     <div>
-                        <div><h1 className={"text-md"}>Proceed to Checkout</h1></div>
-                        <div><h1 className={"text-md"}>{totalPrice}$</h1></div>
+                        <div><h1 className="text-md lg:text-xl">Proceed to Checkout</h1></div>
+                        <div><h1 className={"text-md lg:text-xl"}>{totalPrice}$</h1></div>
                     </div>
                 </Button>}
                 {errorMessage && <div>
