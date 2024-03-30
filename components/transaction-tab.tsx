@@ -8,9 +8,9 @@ import { completeTransaction } from '@/app/lib/actions/transaction.action';
 
 type Props = {
     transaction: DatabaseTransaction
-    index: number
+
 }
-const OrderTab = ({ transaction, index }: Props) => {
+const OrderTab = ({ transaction }: Props) => {
     const currencyFormatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
@@ -30,7 +30,7 @@ const OrderTab = ({ transaction, index }: Props) => {
 
     };
     return (
-        <Card key={index} className='w-full max-w-xl px-5 py-3'>
+        <Card className='w-full max-w-xl px-5 py-3'>
 
             <div className='flex justify-between items-center'>
                 <div>

@@ -22,7 +22,7 @@ const TransactionScreen = ({ data }: TransactionProps) => {
     return (
         <div className='flex flex-col items-center mt-6 w-full'>
             {data.map((transaction, index) => (
-                <OrderTab transaction={transaction} index={index} />
+                <OrderTab key={index} transaction={transaction} />
             ))}
         </div>
     );
