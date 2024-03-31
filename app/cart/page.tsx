@@ -19,15 +19,24 @@ const Cart = () => {
     const [errorMessage, setErrorMessage] = useState("")
     const [openTime, setOpenTime] = useState<string>("")
     const [closeTime, setCloseTime] = useState<string>("")
+    const [times, setTimes] = useState<string[]>([])
     useEffect(() => {
         loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+
         async function helper() {
-            const currentSettings = await getCurrentSettings()
-            setOpenTime(currentSettings.openTime)
-            setCloseTime(currentSettings.closeTime)
+            const currentSettings = await getCurrentSettings();
+            setOpenTime(currentSettings.openTime);
+            setCloseTime(currentSettings.closeTime);
         }
-        helper()
+
+        helper();
     }, []);
+
+    useEffect(() => {
+        const times2 = generateTimeIntervals(openTime, closeTime);
+        console.log(times2);
+        setTimes(times2);
+    }, [openTime, closeTime]);
     function convertTimeStringToDate(timeString: string) {
         const [time, period] = timeString.split(' ');
         let [hours, minutes] = time.split(':').map(Number);
@@ -66,58 +75,53 @@ const Cart = () => {
         }
         checkoutTransaction(transcation)
     };
+    function generateTimeIntervals(startTime: string, endTime: string): string[] {
+        const intervals: string[] = [];
 
+        const parseTime = (time: string): Date => {
+            const [hour, minute, period] = time.split(/:|\s/);
+            const date = new Date();
+            const parsedHour = parseInt(hour);
+            const parsedMinute = parseInt(minute);
+            let parsedPeriod = period ? period.toUpperCase() : 'AM';
 
-    function generateTimeIntervals(openTime: string, closeTime: string) {
-        const estOffset = -5; // Adjust for Eastern Standard Time; consider daylight saving time as needed.
-        const now = new Date();
-        // Ensure we're working with EST by adjusting from UTC.
-        const nowEst = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (estOffset * 3600000));
-
-        const times = []; // This will store our time intervals.
-        // Convert the open and close times to Date objects on the current EST date.
-        const openingTime = adjustDateForTime(nowEst, openTime);
-        const closingTime = adjustDateForTime(nowEst, closeTime);
-
-        // Start from the later of now or the opening time.
-        let currentTime = new Date(Math.max(nowEst.getTime(), openingTime.getTime()));
-        // Round up to the next 15-minute mark. This avoids infinite loops by ensuring we always advance.
-        currentTime.setMinutes(Math.ceil(currentTime.getMinutes() / 15) * 15, 0, 0);
-
-        while (currentTime < closingTime) {
-            // Before adding the time, ensure we're not adding a slot that's too late.
-            if (new Date(currentTime.getTime() + 15 * 60000) > closingTime) {
-                break;
+            if (parsedPeriod === 'PM' && parsedHour !== 12) {
+                date.setHours(parsedHour + 12);
+            } else if (parsedPeriod === 'AM' && parsedHour === 12) {
+                date.setHours(0);
+            } else {
+                date.setHours(parsedHour);
             }
 
-            times.push(currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }));
+            date.setMinutes(parsedMinute);
+            return date;
+        };
 
-            // Increment by 15 minutes for the next iteration.
-            currentTime = new Date(currentTime.getTime() + 15 * 60000);
+        const formatTime = (date: Date): string => {
+            const hour = date.getHours();
+            const minute = date.getMinutes();
+            const period = hour >= 12 ? 'PM' : 'AM';
+            const formattedHour = hour % 12 || 12;
+            const formattedMinute = minute < 10 ? '0' + minute : minute;
+            return `${formattedHour}:${formattedMinute} ${period}`;
+        };
+
+        const start = parseTime(startTime);
+        let end = parseTime(endTime);
+
+        // If end time is earlier than start time, assume it's the next day
+        if (end <= start) {
+            end.setDate(end.getDate() + 1);
         }
 
-        return times;
+        let current = start;
+        while (current < end) {
+            intervals.push(formatTime(current));
+            current = new Date(current.getTime() + 15 * 60000); // Add 15 minutes
+        }
+
+        return intervals;
     }
-
-    function adjustDateForTime(referenceDate: Date, timeString: string): Date {
-        // The convertTimeStringToDate function needs to properly adjust the reference date's time.
-        const [time, period] = timeString.split(' ');
-        let [hours, minutes] = time.split(':').map(Number);
-
-        if (period === 'PM' && hours < 12) hours += 12;
-        if (period === 'AM' && hours === 12) hours = 0;
-
-        const adjustedDate = new Date(referenceDate);
-        adjustedDate.setHours(hours, minutes, 0, 0);
-        return adjustedDate;
-    }
-
-
-    const times = generateTimeIntervals(openTime, closeTime)
-
-
-
-
 
 
     return (
