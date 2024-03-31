@@ -142,7 +142,7 @@ export default function AdminPage() {
             </div>
             <h1 className={subtitle() + "mb-8"}>Set Order Times</h1>
             <div className="flex flex-row w-full sm:w-[75%] md:w-1/2 lg:w-2/5 justify-center items-center mb-8">
-                <Select placeholder={"Current End Time: " + startTime} className="mr-4"
+                <Select placeholder={"Current Start Time: " + startTime} className="mr-4"
                     onChange={(event) => setStartTime(event.target.value)}
                 >
                     {formattedIntervals.map(((item) => {
