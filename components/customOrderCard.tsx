@@ -6,6 +6,7 @@ import { subtitle, title, } from "./primitives";
 import { INGREDIENT_TYPES } from "@/constants";
 import { getMenuAndIngredientData } from "@/app/lib/actions/menu.actions";
 import { useCart } from "@/context/CartContext";
+import { CUSTOM_BASE_PRICE } from "@/constants";
 type MenuAndIngredientData = {
     ingredientData: Ingredient[],
     menuData: MenuItem[]
@@ -22,7 +23,7 @@ export default function CustomOrderCard() {
     const name = "Customize Sandwich"
     const [newSandwichData, setNewSandwichData] = useState({
         name: 'Custom Sandwich',
-        basePrice: 12,
+        basePrice: CUSTOM_BASE_PRICE,
         available: true,
         _id: '',
         ingredients: []
