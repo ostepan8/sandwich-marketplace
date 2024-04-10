@@ -36,3 +36,5 @@ export const MENU_DATA = {
 };
 
 export const INGREDIENT_TYPES = ["Bread", "Cheese", "Meat", "Topping", "Sauce"];
+
+export const CUSTOM_BASE_PRICE = 14;
