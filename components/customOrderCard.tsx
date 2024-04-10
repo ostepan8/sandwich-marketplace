@@ -65,7 +65,7 @@ export default function CustomOrderCard() {
     };
     const updateBasePrice = (updatedIngredients: Ingredient[]) => {
         // Start with the initial base price
-        let newBasePrice = 12;
+        let newBasePrice = CUSTOM_BASE_PRICE;
 
         // Define the limits and extra charges for each category
 
