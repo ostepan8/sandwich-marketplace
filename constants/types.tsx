@@ -38,19 +38,23 @@ export interface MenuAndIngredientProps {
 }
 export interface CartItem {
     menuItem?: MenuItem;  // This can be undefined if it's a custom item
+    merchItem?: MerchItem;
     customDetails?: {     // Details specific to custom sandwiches
         name: string;
         ingredients: string[];
         price: number;
+        size: string
     };
     quantity: number;
 }
 
-
+export interface MerchItemProps {
+    item: MerchItem
+}
 
 export interface CartContextType {
     cartItems: CartItem[];
-    addToCart: (item: MenuItem) => void;
+    addToCart: (item: MenuItem | MerchItem) => void;
     removeFromCart: (_id: string) => void;
     updateQuantity: (_id: string, quantity: number) => void;
     clearCart: () => void;
@@ -83,4 +87,13 @@ export type GetAllDataToReturn = {
     menuData: MenuItem[],
     ingredientData: Ingredient[],
     transactions: DatabaseTransaction[]
+}
+export type MerchItem = {
+    name: string,
+    basePrice: number,
+    description?: string,
+    available: boolean,
+    _id: string,
+    imagePath: string
+    size?: string
 }
