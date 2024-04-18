@@ -23,6 +23,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "context/CartContext.js", "app/api/webhooks/stripe/route.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "context/CartContext.js", "app/api/webhooks/stripe/route.js", "app/lib/database/models/transaction.model.js"],
   "exclude": ["node_modules"]
 }

@@ -7,20 +7,33 @@ const CartItemSchema = new Schema(
       type: String,
       required: true,
     },
+    type: {
+      type: String,
+      required: true,
+      enum: ["menuItem", "merchItem"], // Restrict types to 'menu' or 'merch'
+    },
     ingredients: [
       {
         type: mongoose.Types.ObjectId,
-        ref: "Ingredient", // Assuming "Ingredient" is another model
-        required: true,
+        ref: "Ingredient",
+        required: function () {
+          return this.type === "menuItem";
+        }, // Only required if type is 'menu'
       },
     ],
+    size: {
+      type: String,
+      required: function () {
+        return this.type === "merchItem";
+      }, // Only required if type is 'merch'
+    },
     quantity: {
       type: Number,
       required: true,
     },
   },
   { _id: false }
-); // Optionally disable _id for subdocuments if not needed
+);
 
 // Define the transaction schema
 const TransactionSchema = new Schema({
