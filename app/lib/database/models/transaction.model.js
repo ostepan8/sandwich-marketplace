@@ -16,16 +16,10 @@ const CartItemSchema = new Schema(
       {
         type: mongoose.Types.ObjectId,
         ref: "Ingredient",
-        required: function () {
-          return this.type === "menuItem";
-        }, // Only required if type is 'menu'
       },
     ],
     size: {
       type: String,
-      required: function () {
-        return this.type === "merchItem";
-      }, // Only required if type is 'merch'
     },
     quantity: {
       type: Number,
