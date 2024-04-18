@@ -8,7 +8,7 @@ const Page = () => {
 
     useEffect(() => {
         if (!loading && cartItems.length > 0) {
-
+            console.log('ran')
             clearCart();
         }
     }, [loading]);

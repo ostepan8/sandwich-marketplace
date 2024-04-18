@@ -20,10 +20,9 @@ const Cart = () => {
     const [openTime, setOpenTime] = useState<string>("")
     const [closeTime, setCloseTime] = useState<string>("")
     const [times, setTimes] = useState<string[]>([])
-    const { cartItems, removeFromCart, clearCart }: CartContextType = useCart();
     useEffect(() => {
         loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
-        console.log(cartItems, "ITEMS")
+
         async function helper() {
             const currentSettings = await getCurrentSettings();
             setOpenTime(currentSettings.openTime);
@@ -35,6 +34,7 @@ const Cart = () => {
 
     useEffect(() => {
         const times2 = generateTimeIntervals(openTime, closeTime);
+        console.log(times2);
         setTimes(times2);
     }, [openTime, closeTime]);
     function convertTimeStringToDate(timeString: string) {
@@ -55,19 +55,13 @@ const Cart = () => {
 
     const isOpen = (now >= openDateTime && now <= closeDateTime);
 
+    const { cartItems, removeFromCart, clearCart }: CartContextType = useCart();
     const totalPrice = cartItems.reduce((total, item) => {
-        // Determine the base price based on the type of item
-        const basePrice = item.menuItem
-            ? (typeof item.menuItem.basePrice === 'number' ? item.menuItem.basePrice : 0)
-            : (item.merchItem && typeof item.merchItem?.basePrice === 'number' ? item.merchItem.basePrice : 0);
-
-        // Ensure the quantity is a number
+        const basePrice = typeof item.menuItem?.basePrice === 'number' ? item.menuItem.basePrice : 0;
         const quantity = typeof item.quantity === 'number' ? item.quantity : 0;
 
-        // Calculate subtotal for the current item and add to the total
         return total + basePrice * quantity;
     }, 0);
-
 
 
     const handleCheckout = async () => {
@@ -140,8 +134,8 @@ const Cart = () => {
                         <h1 className={title()}>Your cart</h1>
                     </div>
                     {cartItems.map((item) => (
-                        item.menuItem || item.merchItem ? (
-                            <CartTab key={item.menuItem?._id.toString() || item.merchItem?._id} item={item} />
+                        item.menuItem ? (
+                            <CartTab key={item.menuItem._id.toString()} item={item} />
                         ) : (
                             null
                         )
