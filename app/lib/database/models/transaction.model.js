@@ -9,7 +9,6 @@ const CartItemSchema = new Schema(
     },
     type: {
       type: String,
-      required: true,
       enum: ["menuItem", "merchItem"], // Restrict types to 'menu' or 'merch'
     },
     ingredients: [
@@ -23,7 +22,6 @@ const CartItemSchema = new Schema(
     },
     quantity: {
       type: Number,
-      required: true,
     },
   },
   { _id: false }
