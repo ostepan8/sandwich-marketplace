@@ -32,7 +32,7 @@ export default function MerchPage() {
 				</h1>
 				{!fetching ? <div className="w-full  flex flex-wrap mt-10 md:mt-32  justify-center">
 					{merchItems.map((item) => (
-						<ProductCard item={item} />
+						<ProductCard item={item} key={item._id} />
 					))}
 				</div> :
 					<div className='mt-[30vh]'>
