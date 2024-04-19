@@ -16,47 +16,6 @@ import {
 import IngredientDatabase from "../database/models/ingredient.model";
 import MenuItemDatabase from "../database/models/menuitem.model";
 
-// export async function checkoutTransaction(transaction: ITransaction) {
-//   type LineItem = Stripe.Checkout.SessionCreateParams.LineItem;
-//   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-//   const cartItems: CartItem[] = transaction.cartItems; // Assuming cartItems is an array of CartItem
-//   const lineItems: LineItem[] = [];
-
-//   for (let item of cartItems) {
-//     const lineItem: LineItem = {
-//       quantity: item.quantity,
-//       price_data: {
-//         currency: "usd",
-//         unit_amount: item.menuItem ? item.menuItem?.basePrice * 100 : undefined,
-//         product_data: {
-//           description: item.menuItem?.ingredients
-//             .map((item) => item.name)
-//             .join(", "),
-//           name: item.menuItem?.name.valueOf() || "",
-//           metadata: {
-//             name: item.menuItem?.name.valueOf() || "",
-//             ingredients: item.menuItem
-//               ? item.menuItem.ingredients.map((item) => item._id).join()
-//               : "",
-//           },
-//         },
-//       },
-//     };
-//     lineItems.push(lineItem);
-//   }
-
-//   const session = await stripe.checkout.sessions.create({
-//     line_items: lineItems,
-//     metadata: {
-//       pickUpTime: transaction.pickUpTime,
-//     },
-//     mode: "payment",
-//     success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/summary`,
-//     cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/cart`,
-//   });
-
-//   redirect(session.url!);
-// }
 export async function checkoutTransaction(transaction: ITransaction) {
   type LineItem = Stripe.Checkout.SessionCreateParams.LineItem;
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -64,49 +23,26 @@ export async function checkoutTransaction(transaction: ITransaction) {
   const lineItems: LineItem[] = [];
 
   for (let item of cartItems) {
-    if (item.menuItem) {
-      // Handle menu items
-      const lineItem: LineItem = {
-        quantity: item.quantity,
-        price_data: {
-          currency: "usd",
-          unit_amount: item.menuItem.basePrice * 100, // Convert dollars to cents
-          product_data: {
-            description: item.menuItem.ingredients
-              .map((ingredient) => ingredient.name)
-              .join(", "),
-            name: item.menuItem.name.toString() || "",
-            metadata: {
-              name: item.menuItem.name.toString() || "",
-              ingredients: item.menuItem.ingredients
-                .map((ingredient) => ingredient._id)
-                .join(", "),
-              type: "menuItem",
-            },
+    const lineItem: LineItem = {
+      quantity: item.quantity,
+      price_data: {
+        currency: "usd",
+        unit_amount: item.menuItem ? item.menuItem?.basePrice * 100 : undefined,
+        product_data: {
+          description: item.menuItem?.ingredients
+            .map((item) => item.name)
+            .join(", "),
+          name: item.menuItem?.name.valueOf() || "",
+          metadata: {
+            name: item.menuItem?.name.valueOf() || "",
+            ingredients: item.menuItem
+              ? item.menuItem.ingredients.map((item) => item._id).join()
+              : "",
           },
         },
-      };
-      lineItems.push(lineItem);
-    } else if (item.merchItem) {
-      // Handle merchandise items
-      const lineItem: LineItem = {
-        quantity: item.quantity,
-        price_data: {
-          currency: "usd",
-          unit_amount: item.merchItem.basePrice * 100, // Convert dollars to cents
-          product_data: {
-            description: "Size: " + (item.merchItem?.size || "").toUpperCase(),
-            name: item.merchItem.name || "",
-            metadata: {
-              name: item.merchItem.name || "",
-              size: item.merchItem?.size || "", // Assume size is defined for merch items
-              type: "merchItem",
-            },
-          },
-        },
-      };
-      lineItems.push(lineItem);
-    }
+      },
+    };
+    lineItems.push(lineItem);
   }
 
   const session = await stripe.checkout.sessions.create({
@@ -119,8 +55,72 @@ export async function checkoutTransaction(transaction: ITransaction) {
     cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/cart`,
   });
 
-  return redirect(session.url!); // Redirect to Stripe Checkout URL
+  redirect(session.url!);
 }
+// export async function checkoutTransaction(transaction: ITransaction) {
+//   type LineItem = Stripe.Checkout.SessionCreateParams.LineItem;
+//   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+//   const cartItems: CartItem[] = transaction.cartItems; // Assuming cartItems is an array of CartItem
+//   const lineItems: LineItem[] = [];
+
+//   for (let item of cartItems) {
+//     if (item.menuItem) {
+//       // Handle menu items
+//       const lineItem: LineItem = {
+//         quantity: item.quantity,
+//         price_data: {
+//           currency: "usd",
+//           unit_amount: item.menuItem.basePrice * 100, // Convert dollars to cents
+//           product_data: {
+//             description: item.menuItem.ingredients
+//               .map((ingredient) => ingredient.name)
+//               .join(", "),
+//             name: item.menuItem.name.toString() || "",
+//             metadata: {
+//               name: item.menuItem.name.toString() || "",
+//               ingredients: item.menuItem.ingredients
+//                 .map((ingredient) => ingredient._id)
+//                 .join(", "),
+//               type: "menuItem",
+//             },
+//           },
+//         },
+//       };
+//       lineItems.push(lineItem);
+//     } else if (item.merchItem) {
+//       // Handle merchandise items
+//       const lineItem: LineItem = {
+//         quantity: item.quantity,
+//         price_data: {
+//           currency: "usd",
+//           unit_amount: item.merchItem.basePrice * 100, // Convert dollars to cents
+//           product_data: {
+//             description: "Size: " + (item.merchItem?.size || "").toUpperCase(),
+//             name: item.merchItem.name || "",
+//             metadata: {
+//               name: item.merchItem.name || "",
+//               size: item.merchItem?.size || "", // Assume size is defined for merch items
+//               type: "merchItem",
+//             },
+//           },
+//         },
+//       };
+//       lineItems.push(lineItem);
+//     }
+//   }
+
+//   const session = await stripe.checkout.sessions.create({
+//     line_items: lineItems,
+//     metadata: {
+//       pickUpTime: transaction.pickUpTime,
+//     },
+//     mode: "payment",
+//     success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/summary`,
+//     cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/cart`,
+//   });
+
+//   return redirect(session.url!); // Redirect to Stripe Checkout URL
+// }
 
 export async function createTransaction(transaction: ITransaction) {
   try {
