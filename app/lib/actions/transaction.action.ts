@@ -23,26 +23,50 @@ export async function checkoutTransaction(transaction: ITransaction) {
   const lineItems: LineItem[] = [];
 
   for (let item of cartItems) {
-    const lineItem: LineItem = {
-      quantity: item.quantity,
-      price_data: {
-        currency: "usd",
-        unit_amount: item.menuItem ? item.menuItem?.basePrice * 100 : undefined,
-        product_data: {
-          description: item.menuItem?.ingredients
-            .map((item) => item.name)
-            .join(", "),
-          name: item.menuItem?.name.valueOf() || "",
-          metadata: {
+    if (item.menuItem) {
+      const lineItem: LineItem = {
+        quantity: item.quantity,
+        price_data: {
+          currency: "usd",
+          unit_amount: item.menuItem
+            ? item.menuItem?.basePrice * 100
+            : undefined,
+          product_data: {
+            description: item.menuItem?.ingredients
+              .map((item) => item.name)
+              .join(", "),
             name: item.menuItem?.name.valueOf() || "",
-            ingredients: item.menuItem
-              ? item.menuItem.ingredients.map((item) => item._id).join()
-              : "",
+            metadata: {
+              name: item.menuItem?.name.valueOf() || "",
+              ingredients: item.menuItem
+                ? item.menuItem.ingredients.map((item) => item._id).join()
+                : "",
+            },
           },
         },
-      },
-    };
-    lineItems.push(lineItem);
+      };
+      lineItems.push(lineItem);
+    } else {
+      const lineItem: LineItem = {
+        quantity: item.quantity,
+        price_data: {
+          currency: "usd",
+          unit_amount: item.merchItem
+            ? item.merchItem?.basePrice * 100
+            : undefined,
+          product_data: {
+            description:
+              "Size: " + item.merchItem?.size?.toString().toUpperCase(),
+            name: item.merchItem?.name.valueOf() || "",
+            metadata: {
+              name: item.merchItem?.name.valueOf() || "",
+              size: item.merchItem?.size || "",
+            },
+          },
+        },
+      };
+      lineItems.push(lineItem);
+    }
   }
 
   const session = await stripe.checkout.sessions.create({

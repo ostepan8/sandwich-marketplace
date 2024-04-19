@@ -50,6 +50,9 @@ const TransactionSchema = new Schema({
     type: String,
     // If email is not always required, you can remove 'required: true'
   },
+  size: {
+    type: String,
+  },
   name: {
     type: String,
   },
