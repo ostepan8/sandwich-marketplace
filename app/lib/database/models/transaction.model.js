@@ -21,6 +21,9 @@ const CartItemSchema = new Schema(
     size: {
       type: String,
     },
+    type: {
+      type: String,
+    },
   },
   { _id: false }
 ); // Optionally disable _id for subdocuments if not needed

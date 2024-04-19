@@ -41,6 +41,7 @@ export async function checkoutTransaction(transaction: ITransaction) {
               ingredients: item.menuItem
                 ? item.menuItem.ingredients.map((item) => item._id).join()
                 : "",
+              type: "menu",
             },
           },
         },
@@ -61,6 +62,7 @@ export async function checkoutTransaction(transaction: ITransaction) {
             metadata: {
               name: item.merchItem?.name.valueOf() || "",
               size: item.merchItem?.size || "",
+              type: "merch",
             },
           },
         },

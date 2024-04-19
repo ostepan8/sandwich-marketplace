@@ -28,15 +28,25 @@ async function POST(request) {
     const cartItemData = [];
     for (let i = 0; i < lineData.length; i++) {
       const itemMetaData = lineData[i].price.product.metadata;
-      const ingredients = itemMetaData.ingredients;
-      const ingredientIdArray = ingredients
-        .split(",")
-        .map((item) => new mongoose.Types.ObjectId(item));
-      cartItemData.push({
-        ingredients: ingredientIdArray,
-        name: itemMetaData.name,
-        quantity: lineData[i].quantity,
-      });
+      if (itemMetaData.type == "menu") {
+        const ingredients = itemMetaData.ingredients;
+        const ingredientIdArray = ingredients
+          .split(",")
+          .map((item) => new mongoose.Types.ObjectId(item));
+        cartItemData.push({
+          ingredients: ingredientIdArray,
+          name: itemMetaData.name,
+          quantity: lineData[i].quantity,
+          type: "menu",
+        });
+      } else if (itemMetaData.type == "merch") {
+        cartItemData.push({
+          size: itemMetaData.size,
+          name: itemMetaData.name,
+          quantity: lineData[i].quantity,
+          type: "merch",
+        });
+      }
     }
     const session = await stripe.checkout.sessions.retrieve(id);
 
