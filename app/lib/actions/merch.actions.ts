@@ -43,8 +43,7 @@ export async function getMerchItems() {
       limits.small = item.smallLeft;
       limits.medium = item.mediumLeft;
       limits.large = item.largeLeft;
-      limits.xl = 0;
-      // limits.xl = item.xlLeft;
+      limits.xl = item.xlLeft;
     });
 
     return { merchItems, tShirtLimits, hoodieLimits };
