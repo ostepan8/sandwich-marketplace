@@ -23,7 +23,6 @@ const Cart = () => {
     const { cartItems, removeFromCart, clearCart }: CartContextType = useCart();
     useEffect(() => {
         loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
-        console.log(cartItems, "ITEMS")
         async function helper() {
             const currentSettings = await getCurrentSettings();
             setOpenTime(currentSettings.openTime);

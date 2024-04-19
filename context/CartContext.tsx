@@ -33,6 +33,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   }, []);
 
   const addToCart = (item: MenuItem | MerchItem) => {
+
     setCartItems((prevItems) => {
       const itemKey = item.hasOwnProperty('imagePath') ? 'merchItem' : 'menuItem';
       const itemId = item._id;
@@ -52,6 +53,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
       }
 
       localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+
       return updatedCartItems;
     });
   };
