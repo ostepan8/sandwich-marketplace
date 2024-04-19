@@ -59,9 +59,9 @@ const OrderTab = ({ transaction, removeTransactionById }: Props) => {
                         <li className='list-disc ml-4'>
                             {item.name} - Quantity: {item.quantity}
                         </li>
-                        <li>
+                        {item.type == "menu" && <li>
                             <IngredientText data={item.ingredients} />
-                        </li>
+                        </li>}
                     </React.Fragment>
                 ))}
             </ul>

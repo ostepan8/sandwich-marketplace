@@ -77,6 +77,7 @@ export interface DatabaseTransaction {
         name: string;
         quantity: number,
         ingredients: Ingredient[]
+        type: string,
     }[];
     pickUpTime: string;
     completed: boolean;
