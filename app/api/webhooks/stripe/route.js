@@ -44,7 +44,7 @@ async function POST(request) {
       createdAt: new Date(),
       stripeId: id,
       amount: amount_total ? amount_total : 0,
-      cartItems: [],
+      cartItems: cartItemData,
       pickUpTime: metadata ? metadata.pickUpTime : "",
       completed: false,
       name: session.customer_details.name,
