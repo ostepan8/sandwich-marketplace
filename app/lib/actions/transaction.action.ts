@@ -15,6 +15,7 @@ import {
 } from "@/constants/types";
 import IngredientDatabase from "../database/models/ingredient.model";
 import MenuItemDatabase from "../database/models/menuitem.model";
+import MerchItem from "../database/models/merch.model";
 
 export async function checkoutTransaction(transaction: ITransaction) {
   type LineItem = Stripe.Checkout.SessionCreateParams.LineItem;
@@ -294,5 +295,29 @@ export async function handleRemove(_id: string) {
     return JSON.parse(JSON.stringify(deletedTransaction));
   } catch (error) {
     handleError(error);
+  }
+}
+
+type MerchItemList = {
+  size: "small" | "medium" | "large" | "xl"; // Define valid sizes
+  quantity: number;
+  name: string;
+};
+
+export async function updateMerchItems(list: MerchItemList[]): Promise<void> {
+  try {
+    for (const item of list) {
+      const sizeField = `${item.size}Left`; // Construct the field name like 'smallLeft'
+
+      // Update the merchandise item by name and size
+      await MerchItem.updateOne(
+        { name: item.name },
+        { $inc: { [sizeField]: -item.quantity } } // Use $inc to decrement the inventory
+      );
+    }
+    console.log("Inventory updated successfully.");
+  } catch (error) {
+    console.error("Failed to update inventory:", error);
+    throw error; // Optionally re-throw the error for further handling
   }
 }

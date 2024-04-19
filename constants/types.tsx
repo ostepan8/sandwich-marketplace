@@ -1,3 +1,4 @@
+
 export interface AddOn {
     name: String;
     additionalCost: number;
@@ -50,12 +51,21 @@ export interface CartItem {
 
 export interface MerchItemProps {
     item: MerchItem
+    tShirtLimits?: SizeLimits
+    hoodieLimits?: SizeLimits
 }
+export type SizeLimits = {
+    small: number;
+    medium: number;
+    large: number;
+    xl: number;
+}
+
 
 export interface CartContextType {
     cartItems: CartItem[];
     addToCart: (item: MenuItem | MerchItem) => void;
-    removeFromCart: (_id: string) => void;
+    removeFromCart: (_id: string, size?: string) => void;
     updateQuantity: (_id: string, quantity: number) => void;
     clearCart: () => void;
     loading: boolean
@@ -78,6 +88,8 @@ export interface DatabaseTransaction {
         quantity: number,
         ingredients: Ingredient[]
         type: string,
+        size?: string,
+        description?: string
     }[];
     pickUpTime: string;
     completed: boolean;
@@ -97,4 +109,8 @@ export type MerchItem = {
     _id: string,
     imagePath: string
     size?: string
+    smallLeft?: number
+    mediumLeft?: number
+    largeLeft?: number
+    xlLeft?: number
 }

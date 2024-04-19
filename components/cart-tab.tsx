@@ -18,7 +18,7 @@ export const CartTab = ({ item }: Props) => {
         setLoading(true);
         setTimeout(() => {
             const itemId = item.menuItem?._id || item.merchItem?._id || "";
-            removeFromCart(itemId.toString());
+            removeFromCart(itemId.toString(), item.merchItem?.size);
             setLoading(false);
             setCompleted(true);
             setTimeout(() => setCompleted(false), 250);

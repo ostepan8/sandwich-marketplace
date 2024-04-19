@@ -1,7 +1,10 @@
 /* eslint-disable camelcase */
 
 import mongoose from "mongoose";
-const { createTransaction } = require("@/app/lib/actions/transaction.action");
+const {
+  createTransaction,
+  updateMerchItems,
+} = require("@/app/lib/actions/transaction.action");
 const { NextResponse } = require("next/server");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
@@ -26,6 +29,7 @@ async function POST(request) {
     });
     const lineData = line_items.data;
     const cartItemData = [];
+    const merchItemsBought = [];
     for (let i = 0; i < lineData.length; i++) {
       const itemMetaData = lineData[i].price.product.metadata;
       if (itemMetaData.type == "menu") {
@@ -46,6 +50,11 @@ async function POST(request) {
           quantity: lineData[i].quantity,
           type: "merch",
         });
+        merchItemsBought.push({
+          size: itemMetaData.size,
+          quantity: lineData[i].quantity,
+          name: itemMetaData.name,
+        });
       }
     }
     const session = await stripe.checkout.sessions.retrieve(id);
@@ -61,6 +70,7 @@ async function POST(request) {
       email: session.customer_details.email,
     };
     const newTransaction = await createTransaction(transaction);
+    await updateMerchItems(merchItemsBought);
 
     return NextResponse.json({ message: "OK", transaction: newTransaction });
   }

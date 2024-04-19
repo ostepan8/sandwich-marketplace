@@ -57,7 +57,7 @@ const OrderTab = ({ transaction, removeTransactionById }: Props) => {
                 {transaction.cartItems.map((item, itemIndex) => (
                     <React.Fragment key={itemIndex}>
                         <li className='list-disc ml-4'>
-                            {item.name} - Quantity: {item.quantity}
+                            {item.name} - Size: {item.size?.toUpperCase()} - Quantity: {item.quantity}
                         </li>
                         {item.type == "menu" && <li>
                             <IngredientText data={item.ingredients} />

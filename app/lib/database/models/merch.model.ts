@@ -22,6 +22,18 @@ const merchItem = new Schema({
     required: true,
     default: true,
   },
+  smallLeft: {
+    type: Number,
+  },
+  mediumLeft: {
+    type: Number,
+  },
+  largeLeft: {
+    type: Number,
+  },
+  xlLeft: {
+    type: Number,
+  },
 });
 
 const MerchItem = models?.MerchItem || model("MerchItem", merchItem);
