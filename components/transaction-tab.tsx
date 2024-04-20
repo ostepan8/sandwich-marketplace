@@ -59,6 +59,7 @@ const OrderTab = ({ transaction, removeTransactionById }: Props) => {
                         {item.type == "merch" ? <li className='list-disc ml-4'>
                             {item.name} - Size: {item.size?.toUpperCase()} - Quantity: {item.quantity}
                         </li> : <li>
+                            {item.name} - Quantity: {item.quantity}
                             <IngredientText data={item.ingredients} />
                         </li>}
                     </React.Fragment>
